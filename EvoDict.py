@@ -1,3 +1,6 @@
+from tabulate import tabulate
+from pickle import *
+
 class EvoDict:
     """
     Classe représentant un dictionnaire évolué.
@@ -173,3 +176,99 @@ class EvoDict:
 
             else:
                 print("Choix invalide. Veuillez sélectionner une option valide.")
+
+    def fusions(self, other):
+        """
+        Fusionne les informations d'un autre EvoDict dans le dictionnaire actuel.
+
+        Args:
+            other (EvoDict): L'autre EvoDict dont les informations doivent être fusionnées.
+        """
+        if self.nom_cle != other.nom_cle:
+            raise FusionError("Les noms de clés ne correspondent pas : '{}' et '{}'.".format(self.nom_cle, other.nom_cle))
+        if self.nom_valeur != other.nom_valeur:
+            raise FusionError("Les noms de valeurs ne correspondent pas : '{}' et '{}'.".format(self.nom_valeur, other.nom_valeur))
+
+        for key, value in other.dictionnaire.items():
+            if (key in self.dictionnaire):
+                # Si la clé existe déjà dans le dictionnaire actuel, nous devons fusionner les valeurs.
+                if (value != self.dictionnaire[key]) :
+                    current_value = self.dictionnaire[key]
+                    if (isinstance(current_value, list)):
+                    # Si la valeur actuelle est une liste, nous étendons cette liste avec les nouvelles valeurs.
+                        current_value.append(value)
+                        self.dictionnaire[key] = sorted(current_value)
+                    else:
+                        # Si la valeur actuelle n'est pas une liste, nous transformons les deux valeurs en liste et les fusionnons.
+                        self.dictionnaire[key] = [current_value, value]
+            else:
+                # Si la clé n'existe pas dans le dictionnaire actuel, nous l'ajoutons simplement avec sa valeur.
+                self.dictionnaire[key] = value
+
+    def supprimeParIndex(self, index):
+        """
+        Supprime une clé en fonction de son index dans le dictionnaire.
+
+        Args:
+            index (int): L'index de la clé à supprimer.
+        """
+        keys = list(self.dictionnaire.keys())
+        if 0 <= index < len(keys):
+            key_to_delete = keys[index]
+            del self.dictionnaire[key_to_delete]
+        else:
+            print("L'indice spécifié est hors de la plage du dictionnaire.")
+
+    def rechercheParIndex(self, i):
+        """
+        Recherche une paire clé-valeur par son index dans le dictionnaire.
+ 
+        Args:
+            i (int): L'index de la paire clé-valeur à rechercher.
+        """
+        if i in self.dictionnaire:
+            key = list(self.dictionnaire.keys())[i]
+            value = list(self.dictionnaire.values())[i]
+            headers = [self.nom_cle, self.nom_valeur, "index"]
+            data = [(key, value, i)]
+            print(tabulate(data, headers=headers, tablefmt="grid"))
+        else:
+            print("L'indice n'est pas dans le dictionnaire")
+    
+    # Méthode d'Export
+    def export(self, File) :
+        try :
+            with open(File+".txt", "wb") as f:
+                dump(self.dictionnaire, f)
+        except:
+            if (File == ""):
+                raise ExportError("Le nom du fichier ne doit pas être vide")    
+    
+    # Méthode d'Import
+    
+    def Import(self, File):
+        try:
+            with open(File + ".txt", "rb") as f:
+                self.dictionnaire=load(f)
+        except:
+            raise ImportationError()         
+
+#Exception de EvoDict
+
+class FusionError(Exception):
+    """Exception levée lorsqu'il y a une incompatibilité lors de la fusion de deux EvoDict."""
+    def __init__(self, message="Erreur de fusion : Les clés ou les valeurs ne correspondent pas."):
+        self.message = message
+        super().__init__(self.message)
+        
+class ExportError(Exception):
+    '''Exception levée lorsqu'il y a une erreur dans l'export'''
+    def __init__(self, message="Erreur de l'export"):
+        self.message = message
+        super().__init__(self.message)
+        
+class ImportationError(Exception):
+    '''Exception levée lorsqu'il y a une erreur dans l'import'''
+    def __init__(self, message="Erreur de l'import"):
+        self.message = message
+        super().__init__(self.message)                        
