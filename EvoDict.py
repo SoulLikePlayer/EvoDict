@@ -1,3 +1,5 @@
+from tabulate import tabulate
+
 class EvoDict:
     """
     Classe représentant un dictionnaire évolué.
@@ -67,6 +69,22 @@ class EvoDict:
             del self.dictionnaire[key_to_delete]
         else:
             print("L'indice spécifié est hors de la plage du dictionnaire.")
+
+    def rechercheParIndex(self, i):
+        """
+        Recherche une paire clé-valeur par son index dans le dictionnaire.
+ 
+        Args:
+            i (int): L'index de la paire clé-valeur à rechercher.
+        """
+        if i in self.dictionnaire:
+            key = list(self.dictionnaire.keys())[i]
+            value = list(self.dictionnaire.values())[i]
+            headers = [self.nom_cle, self.nom_valeur, "index"]
+            data = [(key, value, i)]
+            print(tabulate(data, headers=headers, tablefmt="grid"))
+        else:
+            print("L'indice n'est pas dans le dictionnaire")
 
 #Exception de EvoDict
 
