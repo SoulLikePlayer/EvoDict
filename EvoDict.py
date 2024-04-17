@@ -53,4 +53,17 @@ class EvoDict:
           else:
             self.dictionnaire[cle] = [valeur1, valeur2]
         else:
-          self.dictionnaire[cle] = valeur        
+          self.dictionnaire[cle] = valeur
+    
+    def __delitem__(self, cle):
+        """
+        Supprime une clé et la remplace par une clé unique de type "NotAkey".
+        La valeur associée reste dans le dictionnaire.
+        """
+        if cle in self.dictionnaire:
+            self.not_a_key_counter += 1
+            not_a_key = "NotAkey" + str(self.not_a_key_counter)
+            while not_a_key in self.dictionnaire:
+                self.not_a_key_counter += 1
+                not_a_key = "NotAkey" + str(self.not_a_key_counter)
+            self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)              
