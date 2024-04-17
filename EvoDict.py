@@ -103,7 +103,21 @@ class EvoDict:
             with open(File + ".txt", "rb") as f:
                 self.dictionnaire=load(f)
         except:
-            raise ImportationError()         
+            raise ImportationError()     
+        
+    def put(self, key, values, index):
+        """
+        Insère une paire clé-valeur à un index spécifique dans le dictionnaire.
+
+        Args:
+            key: La clé à insérer.
+            values: La valeur associée à la clé.
+            index: L'index où insérer la paire clé-valeur.
+        """
+        if index > len(self.dictionnaire):
+            for i in range(len(self.dictionnaire), index):
+                self.dictionnaire["NotAkey"+str(i)] = None
+        self.dictionnaire[key] = values          
 
 #Exception de EvoDict
 
