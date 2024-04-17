@@ -66,4 +66,10 @@ class EvoDict:
             while not_a_key in self.dictionnaire:
                 self.not_a_key_counter += 1
                 not_a_key = "NotAkey" + str(self.not_a_key_counter)
-            self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)              
+            self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)  
+    
+    # Méthodes de consultation du dictionnaire
+
+    def __contains__(self, cle):
+        """Vérifie si une clé est présente dans le dictionnaire."""
+        return cle in self.dictionnaire                    
