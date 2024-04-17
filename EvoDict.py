@@ -1,3 +1,5 @@
+from tabulate import tabulate
+
 class EvoDict:
     """
     Classe représentant un dictionnaire évolué.
@@ -85,3 +87,9 @@ class EvoDict:
     def __repr__(self):
         """Renvoie une représentation du dictionnaire."""
         return repr(self.dictionnaire)
+    
+    def __str__(self):
+        """Renvoie une représentation du dictionnaire sous forme de tableau."""
+        headers = [self.nom_cle, self.nom_valeur]
+        data = [(cle, valeur) for cle, valeur in self.dictionnaire.items()]
+        return tabulate(data, headers=headers, tablefmt="grid")
