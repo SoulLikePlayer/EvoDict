@@ -123,3 +123,53 @@ class EvoDict:
     def setdefault(self, cle, default=None):
         """Renvoie la valeur associée à la clé spécifiée, en l'ajoutant au besoin avec une valeur par défaut."""
         return self.dictionnaire.setdefault(cle, default) 
+    
+    def __call__(self):
+        """
+        Méthode appelée lorsque l'objet est utilisé comme une fonction.
+        Permet une interaction utilisateur pour effectuer des opérations sur le dictionnaire.
+        """
+        print("Bienvenue dans EvoDict ! Que souhaitez-vous faire ?")
+        while True:
+            print("\nMenu :")
+            print("1. Ajouter une nouvelle paire clé-valeur")
+            print("2. Supprimer une paire clé-valeur")
+            print("3. Afficher le dictionnaire")
+            print("4. Quitter")
+            choix = input("Votre choix : ")
+
+            if choix == "1":
+                cle = input("Entrez la nouvelle clé : ")
+                valeur = input("Entrez la nouvelle valeur : ")
+                # Convertir la valeur au type approprié si possible
+                try:
+                    # Essayez de convertir la valeur en entier
+                    valeur = int(valeur)
+                except ValueError:
+                    # Si la conversion en entier échoue, essayez de convertir en float
+                    try:
+                        valeur = float(valeur)
+                    except ValueError:
+                        # Si la conversion en float échoue, conservez la valeur en tant que chaîne de caractères
+                        pass
+                self[cle] = valeur
+                print("Nouvelle paire clé-valeur ajoutée avec succès !")
+
+            elif choix == "2":
+                cle = input("Entrez la clé à supprimer : ")
+                if cle in self:
+                    del self[cle]
+                    print("Clé supprimée avec succès !")
+                else:
+                    print("La clé spécifiée n'existe pas dans le dictionnaire.")
+
+            elif choix == "3":
+                print("Affichage du dictionnaire :")
+                print(self)
+
+            elif choix == "4":
+                print("Au revoir !")
+                break
+
+            else:
+                print("Choix invalide. Veuillez sélectionner une option valide.")
