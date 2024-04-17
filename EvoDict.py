@@ -25,3 +25,13 @@ class EvoDict:
         self.nom_cle = cle
         self.nom_valeur = valeur
         self.not_a_key_counter = 0
+        
+        # Méthodes de manipulation du dictionnaire
+
+    def __getitem__(self, cle):
+        """Renvoie la valeur associée à la clé spécifiée."""
+        if (isinstance(self.dictionnaire[cle], list)):
+            for i in range(len(self.dictionnaire[cle])) : 
+                print(self.dictionnaire[cle][i]," ", end="")
+        else:   
+            return self.dictionnaire[cle]
