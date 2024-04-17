@@ -77,3 +77,7 @@ class EvoDict:
     def __iter__(self):
         """Renvoie un itérateur sur les clés du dictionnaire."""
         return iter(self.dictionnaire)
+    
+    def __len__(self):
+        """Renvoie le nombre de paires clé-valeur dans le dictionnaire."""
+        return len(self.dictionnaire)
