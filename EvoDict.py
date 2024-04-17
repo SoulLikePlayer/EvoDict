@@ -26,7 +26,33 @@ class EvoDict:
         self.nom_valeur = valeur
         self.not_a_key_counter = 0
 
+def fusions(self, other):
+        """
+        Fusionne les informations d'un autre EvoDict dans le dictionnaire actuel.
 
+        Args:
+            other (EvoDict): L'autre EvoDict dont les informations doivent être fusionnées.
+        """
+        if self.nom_cle != other.nom_cle:
+            raise FusionError("Les noms de clés ne correspondent pas : '{}' et '{}'.".format(self.nom_cle, other.nom_cle))
+        if self.nom_valeur != other.nom_valeur:
+            raise FusionError("Les noms de valeurs ne correspondent pas : '{}' et '{}'.".format(self.nom_valeur, other.nom_valeur))
+
+        for key, value in other.dictionnaire.items():
+            if (key in self.dictionnaire):
+                # Si la clé existe déjà dans le dictionnaire actuel, nous devons fusionner les valeurs.
+                if (value != self.dictionnaire[key]) :
+                    current_value = self.dictionnaire[key]
+                    if (isinstance(current_value, list)):
+                    # Si la valeur actuelle est une liste, nous étendons cette liste avec les nouvelles valeurs.
+                        current_value.append(value)
+                        self.dictionnaire[key] = sorted(current_value)
+                    else:
+                        # Si la valeur actuelle n'est pas une liste, nous transformons les deux valeurs en liste et les fusionnons.
+                        self.dictionnaire[key] = [current_value, value]
+            else:
+                # Si la clé n'existe pas dans le dictionnaire actuel, nous l'ajoutons simplement avec sa valeur.
+                self.dictionnaire[key] = value
 
 
 #Exception de EvoDict
