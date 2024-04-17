@@ -1,4 +1,5 @@
 from tabulate import tabulate
+from pickle import *
 
 class EvoDict:
     """
@@ -85,6 +86,24 @@ class EvoDict:
             print(tabulate(data, headers=headers, tablefmt="grid"))
         else:
             print("L'indice n'est pas dans le dictionnaire")
+    
+    # Méthode d'Export
+    def export(self, File) :
+        try :
+            with open(File+".txt", "wb") as f:
+                dump(self.dictionnaire, f)
+        except:
+            if (File == ""):
+                raise ExportError("Le nom du fichier ne doit pas être vide")    
+    
+    # Méthode d'Import
+    
+    def Import(self, File):
+        try:
+            with open(File + ".txt", "rb") as f:
+                self.dictionnaire=load(f)
+        except:
+            raise ImportationError()         
 
 #Exception de EvoDict
 
