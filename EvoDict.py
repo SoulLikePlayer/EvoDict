@@ -81,3 +81,7 @@ class EvoDict:
     def __len__(self):
         """Renvoie le nombre de paires clé-valeur dans le dictionnaire."""
         return len(self.dictionnaire)
+    
+    def __repr__(self):
+        """Renvoie une représentation du dictionnaire."""
+        return repr(self.dictionnaire)
