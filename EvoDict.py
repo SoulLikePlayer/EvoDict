@@ -26,7 +26,7 @@ class EvoDict:
         self.nom_valeur = valeur
         self.not_a_key_counter = 0
 
-def fusions(self, other):
+    def fusions(self, other):
         """
         Fusionne les informations d'un autre EvoDict dans le dictionnaire actuel.
 
@@ -54,6 +54,19 @@ def fusions(self, other):
                 # Si la clé n'existe pas dans le dictionnaire actuel, nous l'ajoutons simplement avec sa valeur.
                 self.dictionnaire[key] = value
 
+    def supprimeParIndex(self, index):
+        """
+        Supprime une clé en fonction de son index dans le dictionnaire.
+
+        Args:
+            index (int): L'index de la clé à supprimer.
+        """
+        keys = list(self.dictionnaire.keys())
+        if 0 <= index < len(keys):
+            key_to_delete = keys[index]
+            del self.dictionnaire[key_to_delete]
+        else:
+            print("L'indice spécifié est hors de la plage du dictionnaire.")
 
 #Exception de EvoDict
 
