@@ -73,3 +73,7 @@ class EvoDict:
     def __contains__(self, cle):
         """Vérifie si une clé est présente dans le dictionnaire."""
         return cle in self.dictionnaire                    
+    
+    def __iter__(self):
+        """Renvoie un itérateur sur les clés du dictionnaire."""
+        return iter(self.dictionnaire)
