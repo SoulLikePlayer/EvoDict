@@ -25,3 +25,14 @@ class EvoDict:
         self.nom_cle = cle
         self.nom_valeur = valeur
         self.not_a_key_counter = 0
+
+
+
+
+#Exception de EvoDict
+
+class FusionError(Exception):
+    """Exception levée lorsqu'il y a une incompatibilité lors de la fusion de deux EvoDict."""
+    def __init__(self, message="Erreur de fusion : Les clés ou les valeurs ne correspondent pas."):
+        self.message = message
+        super().__init__(self.message)        
