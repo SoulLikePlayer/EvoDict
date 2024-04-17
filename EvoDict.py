@@ -67,3 +67,10 @@ class EvoDict:
                 self.not_a_key_counter += 1
                 not_a_key = "NotAkey" + str(self.not_a_key_counter)
             self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)              
+     
+    #Methode de copie         
+    def __copy__(self):
+        """Renvoie une copie superficielle du dictionnaire."""
+        return EvoDict(self.dictionnaire.copy(), self.nom_cle, self.nom_valeur)     
+    
+       
