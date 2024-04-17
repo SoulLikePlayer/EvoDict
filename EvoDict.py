@@ -73,4 +73,7 @@ class EvoDict:
         """Renvoie une copie superficielle du dictionnaire."""
         return EvoDict(self.dictionnaire.copy(), self.nom_cle, self.nom_valeur)     
     
-       
+    def __deepcopy__(self, memo):
+        """Renvoie une copie en profondeur du dictionnaire."""
+        from copy import deepcopy
+        return EvoDict(deepcopy(self.dictionnaire, memo), self.nom_cle, self.nom_valeur)   
