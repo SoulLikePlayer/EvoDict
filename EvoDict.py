@@ -92,4 +92,16 @@ class FusionError(Exception):
     """Exception levée lorsqu'il y a une incompatibilité lors de la fusion de deux EvoDict."""
     def __init__(self, message="Erreur de fusion : Les clés ou les valeurs ne correspondent pas."):
         self.message = message
-        super().__init__(self.message)        
+        super().__init__(self.message)
+        
+class ExportError(Exception):
+    '''Exception levée lorsqu'il y a une erreur dans l'export'''
+    def __init__(self, message="Erreur de l'export"):
+        self.message = message
+        super().__init__(self.message)
+        
+class ImportationError(Exception):
+    '''Exception levée lorsqu'il y a une erreur dans l'import'''
+    def __init__(self, message="Erreur de l'import"):
+        self.message = message
+        super().__init__(self.message)                        
