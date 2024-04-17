@@ -35,3 +35,22 @@ class EvoDict:
                 print(self.dictionnaire[cle][i]," ", end="")
         else:   
             return self.dictionnaire[cle]
+        
+    def __setitem__(self, cle, valeur):
+        """Définit la valeur associée à la clé spécifiée."""
+        if (valeur in self.dictionnaire.values()):
+            for k, v in self.dictionnaire.items():
+                if ((v == valeur) and ("NotAkey" in k)):
+                    valeur = self.dictionnaire.pop(k)
+                    self.not_a_key_counter -= 1
+                    break
+        if (cle in self.dictionnaire.keys()) :
+          valeur2 = valeur
+          valeur1 = self.dictionnaire[cle]
+          if (isinstance(valeur1, list)):
+            valeur1.append(valeur2)
+            self.dictionnaire[cle] = valeur1
+          else:
+            self.dictionnaire[cle] = [valeur1, valeur2]
+        else:
+          self.dictionnaire[cle] = valeur        
