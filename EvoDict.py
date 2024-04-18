@@ -79,7 +79,31 @@ class EvoDict:
     def __deepcopy__(self, memo):
         """Renvoie une copie en profondeur du dictionnaire."""
         from copy import deepcopy
-        return EvoDict(deepcopy(self.dictionnaire, memo), self.nom_cle, self.nom_valeur)  
+        return EvoDict(deepcopy(self.dictionnaire, memo), self.nom_cle, self.nom_valeur) 
+    
+        # Méthodes de consultation du dictionnaire
+
+    def __contains__(self, cle):
+        """Vérifie si une clé est présente dans le dictionnaire."""
+        return cle in self.dictionnaire                    
+    
+    def __iter__(self):
+        """Renvoie un itérateur sur les clés du dictionnaire."""
+        return iter(self.dictionnaire)
+    
+    def __len__(self):
+        """Renvoie le nombre de paires clé-valeur dans le dictionnaire."""
+        return len(self.dictionnaire)
+    
+    def __repr__(self):
+        """Renvoie une représentation du dictionnaire."""
+        return repr(self.dictionnaire)
+    
+    def __str__(self):
+        """Renvoie une représentation du dictionnaire sous forme de tableau."""
+        headers = [self.nom_cle, self.nom_valeur]
+        data = [(cle, valeur) for cle, valeur in self.dictionnaire.items()]
+        return tabulate(data, headers=headers, tablefmt="grid") 
     
     # Autres méthodes de manipulation du dictionnaire
 
@@ -272,3 +296,5 @@ class ImportationError(Exception):
     def __init__(self, message="Erreur de l'import"):
         self.message = message
         super().__init__(self.message)                        
+
+    
