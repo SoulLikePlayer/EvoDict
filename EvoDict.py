@@ -1,6 +1,7 @@
 from tabulate import tabulate
 from pickle import *
-
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
 class EvoDict:
@@ -291,7 +292,35 @@ class EvoDict:
         if index > len(self.dictionnaire):
             for i in range(len(self.dictionnaire), index):
                 self.dictionnaire["NotAkey"+str(i)] = None
-        self.dictionnaire[key] = values          
+        self.dictionnaire[key] = values
+        
+    def Graphe(self):
+        """Visualise l'arbre représenté par le dictionnaire en utilisant un parcours en profondeur."""
+        # Créer un graphe dirigé pour représenter l'arbre
+        G = nx.DiGraph()
+
+        # Fonction auxiliaire pour parcourir l'arbre en profondeur
+        def dfs(node, parent=None):
+            # Ajouter le nœud au graphe
+            G.add_node(node)
+            # Si le nœud a un parent, ajouter une arête du parent au nœud actuel
+            if parent is not None:
+                G.add_edge(parent, node)
+            # Récupérer les enfants du nœud actuel
+            children = self.dictionnaire.get(node, [])
+            # Parcourir récursivement les enfants du nœud actuel
+            for child in children:
+                dfs(child, node)
+
+        # Commencer le parcours en profondeur à partir de la racine de l'arbre (clé principale)
+        root = next(iter(self.dictionnaire.keys()), None)
+        if root is not None:
+            dfs(root)
+
+        # Dessiner le graphe
+        pos = nx.spring_layout(G)  # Layout algorithm for node positions
+        nx.draw(G, pos, with_labels=True, arrows=True)
+        plt.show()              
 
 #Exception de EvoDict
 
