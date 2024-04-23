@@ -1,6 +1,6 @@
 from EvoDict import *
-evo_dict = EvoDict({
-        "A": ["B", "C"],
+evo_dict = Graphe({
+        "A": ["B", "C", "E", "I"],
         "B": "D",
         "C": "F",
         "D": [],
@@ -12,4 +12,4 @@ evo_dict = EvoDict({
     })
 
     # Visualiser l'arbre
-evo_dict.Graphe()
+print(evo_dict)

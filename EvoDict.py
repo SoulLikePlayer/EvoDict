@@ -294,30 +294,29 @@ class EvoDict:
                 self.dictionnaire["NotAkey"+str(i)] = None
         self.dictionnaire[key] = values
         
-    def Graphe(self):
-        """Visualise l'arbre représenté par le dictionnaire en utilisant un parcours en profondeur."""
+#Classe de graphe
+class Graphe(EvoDict):
+     def __init__(self, dictionnaire=None, cle="key", valeur="value"):
+         super().__init__(dictionnaire, cle, valeur)
+     
+     def __str__(self):
+        """Affiche le graphe."""
         # Créer un graphe dirigé pour représenter l'arbre
         G = nx.DiGraph()
 
-        # Fonction auxiliaire pour parcourir l'arbre en profondeur
+        # Fonction auxiliaire pour parcourir l'arbre en profondeur et ajouter des nœuds et des arêtes au graphe
         def dfs(node, parent=None):
-            # Ajouter le nœud au graphe
             G.add_node(node)
-            # Si le nœud a un parent, ajouter une arête du parent au nœud actuel
             if parent is not None:
                 G.add_edge(parent, node)
-            # Récupérer les enfants du nœud actuel
             children = self.dictionnaire.get(node, [])
-            # Vérifier le type des enfants et les traiter en conséquence
             if isinstance(children, list):
-                # Parcourir récursivement les enfants de type liste
                 for child in children:
                     dfs(child, node)
             else:
-                # Traiter l'enfant comme un seul nœud
                 dfs(children, node)
 
-        # Commencer le parcours en profondeur à partir de la racine de l'arbre (clé principale)
+        # Commencer le parcours en profondeur à partir de la racine de l'arbre
         root = next(iter(self.dictionnaire.keys()), None)
         if root is not None:
             dfs(root)
@@ -326,6 +325,9 @@ class EvoDict:
         pos = nx.spring_layout(G)  # Layout algorithm for node positions
         nx.draw(G, pos, with_labels=True, arrows=True)
         plt.show()
+        return ""
+     
+         
 
 #Exception de EvoDict
 
