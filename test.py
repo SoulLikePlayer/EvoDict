@@ -12,4 +12,5 @@ evo_dict = Graphe({
     })
 
     # Visualiser l'arbre
+evo_dict["I"] = "J"    
 print(evo_dict)

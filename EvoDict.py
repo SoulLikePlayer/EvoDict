@@ -298,9 +298,18 @@ class EvoDict:
 class Graphe(EvoDict):
      def __init__(self, dictionnaire=None, cle="key", valeur="value"):
          super().__init__(dictionnaire, cle, valeur)
+         
+     def __setitem__(self, cle, valeur):
+         return super().__setitem__(cle, valeur) 
+         value_in_key = False
+         for key in self.dictionnaire:
+             if (key == valeur):
+                 value_in_key = True
+         if (value_in_key == False):
+             self.dictionnaire[valeur] = []          
      
      def __str__(self):
-        """Affiche le graphe."""
+        """Affiche le dictionnaire sous forme de graphe grâce au parcours en profondeurs."""
         # Créer un graphe dirigé pour représenter l'arbre
         G = nx.DiGraph()
 
