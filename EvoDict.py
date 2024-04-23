@@ -308,9 +308,14 @@ class EvoDict:
                 G.add_edge(parent, node)
             # Récupérer les enfants du nœud actuel
             children = self.dictionnaire.get(node, [])
-            # Parcourir récursivement les enfants du nœud actuel
-            for child in children:
-                dfs(child, node)
+            # Vérifier le type des enfants et les traiter en conséquence
+            if isinstance(children, list):
+                # Parcourir récursivement les enfants de type liste
+                for child in children:
+                    dfs(child, node)
+            else:
+                # Traiter l'enfant comme un seul nœud
+                dfs(children, node)
 
         # Commencer le parcours en profondeur à partir de la racine de l'arbre (clé principale)
         root = next(iter(self.dictionnaire.keys()), None)
@@ -320,7 +325,7 @@ class EvoDict:
         # Dessiner le graphe
         pos = nx.spring_layout(G)  # Layout algorithm for node positions
         nx.draw(G, pos, with_labels=True, arrows=True)
-        plt.show()              
+        plt.show()
 
 #Exception de EvoDict
 

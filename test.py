@@ -12,5 +12,6 @@ def fibonacci(n):
 # Test avec les 10 premiers termes de Fibonacci
 n = 10
 fibonacci_dict = fibonacci(n)
-print("Suite de Fibonacci jusqu'au", n, "ème terme :")
-print(fibonacci_dict)
+print("Suite de Fibonacci jusqu'au", n, "ème terme")
+fibonacci_dict.Graphe()
+
