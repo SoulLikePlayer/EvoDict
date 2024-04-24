@@ -12,5 +12,8 @@ evo_dict = Graphe({
     })
 
     # Visualiser l'arbre
-evo_dict["I"] = "J"    
+evo_dict["I"] = "Z"  
 print(evo_dict)
+
+evo_2 = EvoDict(evo_dict, "clé", "valeur")
+print(evo_2)

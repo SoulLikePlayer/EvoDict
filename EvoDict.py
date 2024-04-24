@@ -300,13 +300,13 @@ class Graphe(EvoDict):
          super().__init__(dictionnaire, cle, valeur)
          
      def __setitem__(self, cle, valeur):
-         return super().__setitem__(cle, valeur) 
+         super().__setitem__(cle, valeur) 
          value_in_key = False
          for key in self.dictionnaire:
              if (key == valeur):
                  value_in_key = True
          if (value_in_key == False):
-             self.dictionnaire[valeur] = []          
+             self.dictionnaire[valeur] = []  
      
      def __str__(self):
         """Affiche le dictionnaire sous forme de graphe grâce au parcours en profondeurs."""
@@ -331,7 +331,7 @@ class Graphe(EvoDict):
             dfs(root)
 
         # Dessiner le graphe
-        pos = nx.spring_layout(G)  # Layout algorithm for node positions
+        pos = nx.spring_layout(G)
         nx.draw(G, pos, with_labels=True, arrows=True)
         plt.show()
         return ""
