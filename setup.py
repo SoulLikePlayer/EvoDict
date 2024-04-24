@@ -6,7 +6,7 @@ setup(
     packages=find_packages(),
     author='Louis',
     author_email='louislazare.pro@gmail.com',
-    description='Une classe représentant un dictionnaire évolué',
+    description='un dictionnaire évolué',
     install_requires=[
         'tabulate',
         'networkx',
