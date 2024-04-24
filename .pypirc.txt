@@ -1,7 +1,0 @@
-[distutils]
-index-servers =
-    pypi
-
-[pypi]
-username = SoulLikePlayer
-password = Lemanoir2005&

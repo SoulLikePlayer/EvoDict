@@ -1,7 +1,7 @@
 from tabulate import tabulate
 from pickle import *
-import networkx as nx
-import matplotlib.pyplot as plt
+from EvoDict import *
+
 
 
 class EvoDict:
@@ -293,69 +293,3 @@ class EvoDict:
             for i in range(len(self.dictionnaire), index):
                 self.dictionnaire["NotAkey"+str(i)] = None
         self.dictionnaire[key] = values
-        
-#Classe de graphe
-class Graphe(EvoDict):
-     def __init__(self, dictionnaire=None, cle="key", valeur="value"):
-         super().__init__(dictionnaire, cle, valeur)
-         
-     def __setitem__(self, cle, valeur):
-         super().__setitem__(cle, valeur) 
-         value_in_key = False
-         for key in self.dictionnaire:
-             if (key == valeur):
-                 value_in_key = True
-         if (value_in_key == False):
-             self.dictionnaire[valeur] = []  
-     
-     def __str__(self):
-        """Affiche le dictionnaire sous forme de graphe grâce au parcours en profondeurs."""
-        # Créer un graphe dirigé pour représenter l'arbre
-        G = nx.DiGraph()
-
-        # Fonction auxiliaire pour parcourir l'arbre en profondeur et ajouter des nœuds et des arêtes au graphe
-        def dfs(node, parent=None):
-            G.add_node(node)
-            if parent is not None:
-                G.add_edge(parent, node)
-            children = self.dictionnaire.get(node, [])
-            if isinstance(children, list):
-                for child in children:
-                    dfs(child, node)
-            else:
-                dfs(children, node)
-
-        # Commencer le parcours en profondeur à partir de la racine de l'arbre
-        root = next(iter(self.dictionnaire.keys()), None)
-        if root is not None:
-            dfs(root)
-
-        # Dessiner le graphe
-        pos = nx.spring_layout(G)
-        nx.draw(G, pos, with_labels=True, arrows=True)
-        plt.show()
-        return ""
-     
-         
-
-#Exception de EvoDict
-
-class FusionError(Exception):
-    """Exception levée lorsqu'il y a une incompatibilité lors de la fusion de deux EvoDict."""
-    def __init__(self, message="Erreur de fusion : Les clés ou les valeurs ne correspondent pas."):
-        self.message = message
-        super().__init__(self.message)
-        
-class ExportError(Exception):
-    '''Exception levée lorsqu'il y a une erreur dans l'export'''
-    def __init__(self, message="Erreur de l'export"):
-        self.message = message
-        super().__init__(self.message)
-        
-class ImportationError(Exception):
-    '''Exception levée lorsqu'il y a une erreur dans l'import'''
-    def __init__(self, message="Erreur de l'import"):
-        self.message = message
-        super().__init__(self.message)                        
-
-    
