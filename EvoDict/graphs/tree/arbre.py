@@ -1,3 +1,5 @@
+import networkx as nx
+import matplotlib.pyplot as plt
 from EvoDict.graphs import Graphe
 
 class Arbre(Graphe):
@@ -10,4 +12,4 @@ class Arbre(Graphe):
       return super().__setitem__(cle, valeur)
      
     def __str__(self):
-      return super().__str__(self)      
+      return super().__str__()      
