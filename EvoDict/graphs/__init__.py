@@ -3,6 +3,7 @@
 
 # Importer la classe Graphe pour l'exposer dans ce sous-module
 from .graph import Graphe
+from .tree import Arbre
 
 # Déclarer les éléments à exposer lors de l'importation avec "*"
-__all__ = ["Graphe"]
+__all__ = ["Graphe", "Arbre"]
