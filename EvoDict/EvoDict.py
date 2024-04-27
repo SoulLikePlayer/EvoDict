@@ -1,6 +1,6 @@
 from tabulate import tabulate
 from pickle import *
-from EvoDict import *
+from EvoDict.exceptions import FusionError, ImportationError, ExportError
 
 
 
