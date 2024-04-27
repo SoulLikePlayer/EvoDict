@@ -3,7 +3,7 @@
 # Exposer les classes principales du package
 from .EvoDict import EvoDict
 from .exceptions import FusionError, ExportError, ImportationError
-from .graphs import Graphe
+from .graphs import Graphe, Arbre
 
 # Déclarer les éléments à exposer lors de l'importation avec "*"
-__all__ = ["EvoDict", "Graphe", "FusionError", "ExportError", "ImportationError"]
+__all__ = ["EvoDict", "Graphe", "FusionError", "ExportError", "ImportationError", "Arbre"]
