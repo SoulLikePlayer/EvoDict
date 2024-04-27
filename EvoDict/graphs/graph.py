@@ -19,7 +19,9 @@ class Graphe(EvoDict):
         # Fonction auxiliaire pour parcourir l'arbre en profondeur et ajouter des nœuds et des arêtes au graphe
         visited = set()  # Ensemble pour suivre les nœuds déjà visités
         def dfs(node, parent=None):
-            if node in visited:  # Si le nœud a déjà été visité, on arrête la récursion
+            if node in visited: 
+                if parent is not None:
+                    G.add_edge(parent, node)# Si le nœud a déjà été visité, on arrête la récursion
                 return
             visited.add(node)
             G.add_node(node)
