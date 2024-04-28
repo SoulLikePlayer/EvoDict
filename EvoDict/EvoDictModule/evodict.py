@@ -4,7 +4,7 @@ from EvoDict import *
 
 
 
-class EvoDict:
+class Evodict:
     """
     Classe représentant un dictionnaire évolué.
 
@@ -77,12 +77,12 @@ class EvoDict:
     #Methode de copie         
     def __copy__(self):
         """Renvoie une copie superficielle du dictionnaire."""
-        return EvoDict(self.dictionnaire.copy(), self.nom_cle, self.nom_valeur)     
+        return Evodict(self.dictionnaire.copy(), self.nom_cle, self.nom_valeur)     
     
     def __deepcopy__(self, memo):
         """Renvoie une copie en profondeur du dictionnaire."""
         from copy import deepcopy
-        return EvoDict(deepcopy(self.dictionnaire, memo), self.nom_cle, self.nom_valeur) 
+        return Evodict(deepcopy(self.dictionnaire, memo), self.nom_cle, self.nom_valeur) 
     
         # Méthodes de consultation du dictionnaire
 

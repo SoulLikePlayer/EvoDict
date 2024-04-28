@@ -1,5 +1,5 @@
 from tabulate import tabulate
-from EvoDict.graphs import Graphe
+from EvoDict.graphsModule import Graphe
 
 class Matrice(Graphe):
     def __init__(self, dictionnaire=None, cle="key", valeur="value"):

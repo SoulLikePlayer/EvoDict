@@ -1,8 +1,8 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from EvoDict import EvoDict
+from EvoDict import Evodict
 
-class Graphe(EvoDict):
+class Graphe(Evodict):
     def __init__(self, dictionnaire=None, cle="key", valeur="value"):
         """
     représente un graphe

@@ -1,3 +1,7 @@
-# Contenu de __init__.py dans le dossier de tests
+# Contenu de __init__.py à la racine du package
 
-# Ce fichier peut rester vide, à moins que vous n'ayez besoin d'initialisations spécifiques pour les tests.
+# Importer les classes principales des sous-modules
+from .EvoDict import *
+
+# Déclarer les éléments à exposer lors de l'importation avec "*"
+__all__ = EvoDict.__all__
