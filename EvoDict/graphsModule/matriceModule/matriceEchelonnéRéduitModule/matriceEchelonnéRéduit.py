@@ -49,10 +49,16 @@ class MatriceEchelonneeReduite(Matrice):
             # Échelonner la ligne actuelle
             pivot = self.dictionnaire[list(self.dictionnaire.keys())[i_pivot]][j_pivot]
             if pivot != 0:
-                for i in range(i_pivot + 1, nb_lignes):
-                    coef = self.dictionnaire[list(self.dictionnaire.keys())[i]][j_pivot] / pivot
-                    for j in range(j_pivot, nb_colonnes):
-                        self.dictionnaire[list(self.dictionnaire.keys())[i]][j] -= coef * self.dictionnaire[list(self.dictionnaire.keys())[i_pivot]][j]
+                # Diviser la ligne par le pivot pour obtenir un 1 sur la diagonale
+                for j in range(j_pivot, nb_colonnes):
+                    self.dictionnaire[list(self.dictionnaire.keys())[i_pivot]][j] /= pivot
+                
+                # Soustraire les multiples de la ligne actuelle des autres lignes pour obtenir des zéros en dessous du pivot
+                for i in range(nb_lignes):
+                    if i != i_pivot:
+                        coef = self.dictionnaire[list(self.dictionnaire.keys())[i]][j_pivot]
+                        for j in range(j_pivot, nb_colonnes):
+                            self.dictionnaire[list(self.dictionnaire.keys())[i]][j] -= coef * self.dictionnaire[list(self.dictionnaire.keys())[i_pivot]][j]
             
             # Passer à la ligne et à la colonne suivante
             i_pivot += 1

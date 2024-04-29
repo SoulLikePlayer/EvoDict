@@ -3,7 +3,7 @@ from EvoDict import *
 # Création d'une matrice qui n'est pas échelonnée réduite
 matrice_non_echelonnee_reduite = MatriceEchelonneeReduite({
     "ligne1": [1, 2, 3],
-    "ligne2": [1, 1, 4],
+    "ligne2": [1, 3, 4],
     "ligne3": [0, 0, 1]
 })
 
