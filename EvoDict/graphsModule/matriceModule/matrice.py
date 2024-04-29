@@ -16,6 +16,23 @@ class Matrice(Graphe):
             row = ["ligne {}".format(i + 1)] + value
             data.append(row)
         return tabulate(data, headers=headers, tablefmt="grid")
+    
+    def __setitem__(self, cle, valeur):
+        if cle not in self.dictionnaire:
+            # Si la clé n'existe pas, cela signifie que nous ajoutons une nouvelle ligne
+            new_row = [0] * len(list(self.dictionnaire.values())[0])  # Crée une nouvelle ligne remplie de zéros
+            self.dictionnaire[cle] = new_row
+        elif isinstance(valeur, list):
+            # Si la valeur est une liste, cela signifie que nous mettons à jour une ligne existante
+            if len(valeur) != len(list(self.dictionnaire.values())[0]):
+                raise ValueError("La longueur de la valeur ne correspond pas au nombre de colonnes de la matrice.")
+            self.dictionnaire[cle] = valeur
+        else:
+            # Si la valeur est un scalaire, cela signifie que nous mettons à jour une seule cellule de la matrice
+            if len(self.dictionnaire[cle]) == 0:
+                # Si la ligne est vide, remplissez-la de zéros avant d'ajouter la valeur
+                self.dictionnaire[cle] = [0] * len(list(self.dictionnaire.values())[0])
+            self.dictionnaire[cle].append(valeur)  # Ajoutez la valeur à la ligne existante
 # Méthode d'addition de matrices
     def addition(self, other):
         """
