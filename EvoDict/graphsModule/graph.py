@@ -28,13 +28,13 @@ class Graphe(Evodict):
         # Fonction auxiliaire pour parcourir l'arbre en profondeur et ajouter des nœuds et des arêtes au graphe
         visited = set()  # Ensemble pour suivre les nœuds déjà visités
         def dfs(node, parent=None):
-            if node in visited: 
-                if parent is not None:
-                    G.add_edge(parent, node)# Si le nœud a déjà été visité, on arrête la récursion
+            if node in visited:
+                if parent is not None and self.dictionnaire[parent] is not None:
+                    G.add_edge(parent, node)  # Si le nœud a déjà été visité, on arrête la récursion
                 return
             visited.add(node)
-            G.add_node(node)
-            if parent is not None:
+            if parent is not None and self.dictionnaire[parent] is not None:
+                G.add_node(node)
                 G.add_edge(parent, node)
             children = self.dictionnaire.get(node, [])
             if isinstance(children, list):
@@ -53,4 +53,3 @@ class Graphe(Evodict):
         nx.draw(G, pos, with_labels=True, arrows=True)
         plt.show()
         return ""
-

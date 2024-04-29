@@ -3,5 +3,6 @@
 
 # Importer la classe Arbre pour l'exposer dans ce sous-module
 from .arbre import Arbre
+from .arbreBinaireModule import ArbreBinaire
 
-__all__ = ["Arbre"]
+__all__ = ["Arbre", "ArbreBinaire"]
