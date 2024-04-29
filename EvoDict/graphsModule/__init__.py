@@ -4,7 +4,7 @@
 # Importer la classe Graphe pour l'exposer dans ce sous-module
 from .graph import Graphe
 from .treeModule import Arbre
-from .matriceModule import Matrice, MatriceEchelonneeReduite
+from .matriceModule import Matrice, MatriceEchelonneeReduite, MatriceBinaire, MatriceTriangulaire
 
 # Déclarer les éléments à exposer lors de l'importation avec "*"
-__all__ = ["Graphe", "Arbre", "Matrice", "MatriceEchelonneeReduite"]
+__all__ = ["Graphe", "Arbre", "Matrice", "MatriceEchelonneeReduite", "MatriceBinaire", "MatriceTriangulaire"]

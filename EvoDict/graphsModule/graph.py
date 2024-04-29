@@ -11,7 +11,7 @@ class Graphe(Evodict):
         dictionnaire (dict): Le dictionnaire contenant les données.
         nom_cle (str): Le nom utilisé pour désigner les clés.
         nom_valeur (str): Le nom utilisé pour désigner les valeurs.
-        not_a_key_counter (int): Compteur utilisé pour générer des clés uniques pour les éléments supprimés.
+       
     """
         super().__init__(dictionnaire, cle, valeur)
 

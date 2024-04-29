@@ -9,7 +9,7 @@ class Matrice(Graphe):
         """
         Retourne la représentation de la matrice sous forme de tableau à l'aide de la bibliothèque tabulate.
         """
-        headers = ["ligne n°"] + list(self.dictionnaire.keys())
+        headers = ["colonne n°"] + list(self.dictionnaire.keys())
         data = []
         for i, (key, value) in enumerate(self.dictionnaire.items()):
             row = ["ligne {}".format(i + 1)] + value

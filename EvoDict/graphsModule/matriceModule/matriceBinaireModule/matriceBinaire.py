@@ -1,4 +1,4 @@
-from EvoDict import *
+from EvoDict.graphsModule.matriceModule import Matrice
 
 class MatriceBinaire(Matrice):
     def __init__(self, dictionnaire=None, cle="key", valeur="value"):
