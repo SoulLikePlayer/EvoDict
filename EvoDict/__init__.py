@@ -4,6 +4,7 @@
 from .EvoDictModule import Evodict
 from .exceptionsModule import FusionError, ExportError, ImportationError
 from .graphsModule import Graphe, Arbre, Matrice, MatriceEchelonneeReduite, MatriceBinaire, MatriceTriangulaire, ArbreBinaire
+from .gestionRessourceModule import GestionRessource
 
 # Déclarer les éléments à exposer lors de l'importation avec "*"
-__all__ = ["Evodict", "Graphe", "FusionError", "ExportError", "ImportationError", "Arbre", "Matrice", "MatriceEchelonneeReduite", "MatriceBinaire", "MatriceTriangulaire", "ArbreBinaire"]
+__all__ = ["Evodict", "Graphe", "FusionError", "ExportError", "ImportationError", "Arbre", "Matrice", "MatriceEchelonneeReduite", "MatriceBinaire", "MatriceTriangulaire", "ArbreBinaire", "GestionRessource"]
