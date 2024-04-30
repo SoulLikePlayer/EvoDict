@@ -8,3 +8,4 @@ class ArbreBinaire(Arbre):
     if (cle in list(self.dictionnaire.keys())):
       if (isinstance(self.dictionnaire[cle]) and len(self.dictionnaire[cle]) == 2):
         raise ValueError("Impossible de mettre plus de 2 clé sur chaque noeud")
+    super().__setitem__(cle, valeur)  

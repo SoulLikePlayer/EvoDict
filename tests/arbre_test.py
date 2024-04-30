@@ -1,5 +1,5 @@
 import unittest
-from EvoDict import Arbre
+from EvoDict import *
 
 class TestVisualisationArbre(unittest.TestCase):
     def test_visualiser_arbre_vide(self):

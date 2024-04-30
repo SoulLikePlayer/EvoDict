@@ -33,8 +33,8 @@ class Graphe(Evodict):
                     G.add_edge(parent, node)  # Si le nœud a déjà été visité, on arrête la récursion
                 return
             visited.add(node)
+            G.add_node(node)
             if parent is not None and self.dictionnaire[parent] is not None:
-                G.add_node(node)
                 G.add_edge(parent, node)
             children = self.dictionnaire.get(node, [])
             if isinstance(children, list):
