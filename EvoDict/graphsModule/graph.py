@@ -16,9 +16,10 @@ class Graphe(Evodict):
         super().__init__(dictionnaire, cle, valeur)
 
     def __setitem__(self, cle, valeur):
-        super().__setitem__(cle, valeur) 
-        if valeur not in self.dictionnaire:
-            self.dictionnaire[valeur] = []  
+        super().__setitem__(cle, valeur)
+        for value in valeur :
+            if value not in list(self.dictionnaire.keys()):
+                self.dictionnaire[value] = []  
 
     def __str__(self):
         """Affiche le dictionnaire sous forme de graphe grâce au parcours en profondeurs."""
