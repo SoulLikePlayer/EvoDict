@@ -5,8 +5,6 @@ dic_ressource = {"pierre" : 2,
 
 Gestion = GestionRessource(dic_ressource)
 
-print(Gestion)
-
-Gestion["pierre"] = "5"
+Gestion["pierre"] = 5
 
 print(Gestion)

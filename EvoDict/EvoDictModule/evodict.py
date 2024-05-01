@@ -1,8 +1,7 @@
 from tabulate import tabulate
 from pickle import *
 from EvoDict import *
-
-
+from EvoDict.exceptionsModule import *
 
 class Evodict:
     """
@@ -24,43 +23,55 @@ class Evodict:
             cle (str, optional): Le nom à utiliser pour les clés. Par défaut, "key".
             valeur (str, optional): Le nom à utiliser pour les valeurs. Par défaut, "value".
         """
+        # Initialise le dictionnaire avec un dictionnaire vide ou un dictionnaire fourni en argument
         if dictionnaire is None:
             self.dictionnaire = dict()
         else:
             self.dictionnaire = dictionnaire
+        # Attributs pour définir les noms de clés et de valeurs
         self.nom_cle = cle
         self.nom_valeur = valeur
+        # Compteur pour générer des clés uniques lors de la suppression de clés existantes
         self.not_a_key_counter = 0
-         
-        # Méthodes de manipulation du dictionnaire
+
+    # Méthodes spéciales pour la manipulation du dictionnaire
 
     def __getitem__(self, cle):
         """Renvoie la valeur associée à la clé spécifiée."""
-        if (isinstance(self.dictionnaire[cle], list)):
-            for i in range(len(self.dictionnaire[cle])) : 
-                print(self.dictionnaire[cle][i]," ", end="")
-        else:   
+        if isinstance(self.dictionnaire[cle], list):
+            # Si la valeur est une liste, affiche chaque élément séparément
+            for item in self.dictionnaire[cle]:
+                print(item, end=" ")
+        else:
+            # Sinon, renvoie simplement la valeur
             return self.dictionnaire[cle]
-        
+
     def __setitem__(self, cle, valeur):
         """Définit la valeur associée à la clé spécifiée."""
-        if (valeur in self.dictionnaire.values()):
+        # Vérifie si la valeur existe déjà dans le dictionnaire
+        if valeur in self.dictionnaire.values():
             for k, v in self.dictionnaire.items():
-                if ((v == valeur) and ("NotAkey" in k)):
+                if v == valeur and "NotAkey" in k:
+                    # Si la valeur existe déjà et est associée à une clé "NotAkey", la supprime
                     valeur = self.dictionnaire.pop(k)
                     self.not_a_key_counter -= 1
                     break
-        if (cle in self.dictionnaire.keys()) :
-          valeur2 = valeur
-          valeur1 = self.dictionnaire[cle]
-          if (isinstance(valeur1, list)):
-            valeur1.append(valeur2)
-            self.dictionnaire[cle] = valeur1
-          else:
-            self.dictionnaire[cle] = [valeur1, valeur2]
+        # Vérifie si la clé existe déjà dans le dictionnaire
+        if cle in self.dictionnaire.keys():
+            valeur2 = valeur
+            valeur1 = self.dictionnaire[cle]
+            # Si la clé existe déjà, vérifie si sa valeur est une liste
+            if isinstance(valeur1, list):
+                # Si oui, ajoute la nouvelle valeur à la liste
+                valeur1.append(valeur2)
+                self.dictionnaire[cle] = valeur1
+            else:
+                # Sinon, transforme les deux valeurs en liste et les fusionne
+                self.dictionnaire[cle] = [valeur1, valeur2]
         else:
-          self.dictionnaire[cle] = valeur
-    
+            # Si la clé n'existe pas, ajoute simplement la nouvelle clé-valeur
+            self.dictionnaire[cle] = valeur
+
     def __delitem__(self, cle):
         """
         Supprime une clé et la remplace par une clé unique de type "NotAkey".
@@ -69,46 +80,38 @@ class Evodict:
         if cle in self.dictionnaire:
             self.not_a_key_counter += 1
             not_a_key = "NotAkey" + str(self.not_a_key_counter)
+            # Trouve une clé unique de type "NotAkey"
             while not_a_key in self.dictionnaire:
                 self.not_a_key_counter += 1
                 not_a_key = "NotAkey" + str(self.not_a_key_counter)
-            self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)              
-     
-    #Methode de copie         
-    def __copy__(self):
-        """Renvoie une copie superficielle du dictionnaire."""
-        return Evodict(self.dictionnaire.copy(), self.nom_cle, self.nom_valeur)     
-    
-    def __deepcopy__(self, memo):
-        """Renvoie une copie en profondeur du dictionnaire."""
-        from copy import deepcopy
-        return Evodict(deepcopy(self.dictionnaire, memo), self.nom_cle, self.nom_valeur) 
-    
-        # Méthodes de consultation du dictionnaire
+            # Remplace la clé spécifiée par la nouvelle clé "NotAkey"
+            self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)
+
+    # Méthodes spéciales pour la consultation du dictionnaire
 
     def __contains__(self, cle):
         """Vérifie si une clé est présente dans le dictionnaire."""
-        return cle in self.dictionnaire                    
-    
+        return cle in self.dictionnaire
+
     def __iter__(self):
         """Renvoie un itérateur sur les clés du dictionnaire."""
         return iter(self.dictionnaire)
-    
+
     def __len__(self):
         """Renvoie le nombre de paires clé-valeur dans le dictionnaire."""
         return len(self.dictionnaire)
-    
+
     def __repr__(self):
         """Renvoie une représentation du dictionnaire."""
         return repr(self.dictionnaire)
-    
+
     def __str__(self):
         """Renvoie une représentation du dictionnaire sous forme de tableau."""
         headers = [self.nom_cle, self.nom_valeur]
         data = [(cle, valeur) for cle, valeur in self.dictionnaire.items()]
-        return tabulate(data, headers=headers, tablefmt="grid") 
-    
-    # Autres méthodes de manipulation du dictionnaire
+        return tabulate(data, headers=headers, tablefmt="grid")
+
+    # Autres méthodes pour la manipulation du dictionnaire
 
     def keys(self):
         """Renvoie les clés du dictionnaire."""
@@ -152,8 +155,8 @@ class Evodict:
 
     def setdefault(self, cle, default=None):
         """Renvoie la valeur associée à la clé spécifiée, en l'ajoutant au besoin avec une valeur par défaut."""
-        return self.dictionnaire.setdefault(cle, default) 
-    
+        return self.dictionnaire.setdefault(cle, default)
+
     def __call__(self):
         """
         Méthode appelée lorsque l'objet est utilisé comme une fonction.
@@ -217,12 +220,12 @@ class Evodict:
             raise FusionError("Les noms de valeurs ne correspondent pas : '{}' et '{}'.".format(self.nom_valeur, other.nom_valeur))
 
         for key, value in other.dictionnaire.items():
-            if (key in self.dictionnaire):
+            if key in self.dictionnaire:
                 # Si la clé existe déjà dans le dictionnaire actuel, nous devons fusionner les valeurs.
-                if (value != self.dictionnaire[key]) :
+                if value != self.dictionnaire[key]:
                     current_value = self.dictionnaire[key]
-                    if (isinstance(current_value, list)):
-                    # Si la valeur actuelle est une liste, nous étendons cette liste avec les nouvelles valeurs.
+                    if isinstance(current_value, list):
+                        # Si la valeur actuelle est une liste, nous étendons cette liste avec les nouvelles valeurs.
                         current_value.append(value)
                         self.dictionnaire[key] = sorted(current_value)
                     else:
@@ -249,7 +252,7 @@ class Evodict:
     def rechercheParIndex(self, i):
         """
         Recherche une paire clé-valeur par son index dans le dictionnaire.
- 
+
         Args:
             i (int): L'index de la paire clé-valeur à rechercher.
         """
@@ -261,25 +264,38 @@ class Evodict:
             print(tabulate(data, headers=headers, tablefmt="grid"))
         else:
             print("L'indice n'est pas dans le dictionnaire")
-    
-    # Méthode d'Export
-    def export(self, File) :
-        try :
-            with open(File+".txt", "wb") as f:
+
+    # Méthodes d'exportation et d'importation
+
+    def export(self, File):
+        """
+        Exporte le dictionnaire vers un fichier.
+
+        Args:
+            File (str): Le nom du fichier de destination.
+        """
+        try:
+            # Exporte le dictionnaire en utilisant pickle
+            with open(File + ".txt", "wb") as f:
                 dump(self.dictionnaire, f)
         except:
-            if (File == ""):
-                raise ExportError("Le nom du fichier ne doit pas être vide")    
-    
-    # Méthode d'Import
-    
+            if File == "":
+                raise ExportError("Le nom du fichier ne doit pas être vide")
+
     def Import(self, File):
+        """
+        Importe le dictionnaire à partir d'un fichier.
+
+        Args:
+            File (str): Le nom du fichier source.
+        """
         try:
+            # Importe le dictionnaire à partir du fichier en utilisant pickle
             with open(File + ".txt", "rb") as f:
-                self.dictionnaire=load(f)
+                self.dictionnaire = load(f)
         except:
-            raise ImportationError()     
-        
+            raise ImportationError()
+
     def put(self, key, values, index):
         """
         Insère une paire clé-valeur à un index spécifique dans le dictionnaire.
@@ -290,6 +306,8 @@ class Evodict:
             index: L'index où insérer la paire clé-valeur.
         """
         if index > len(self.dictionnaire):
+            # Si l'index est en dehors de la plage actuelle du dictionnaire, ajoute des clés "NotAkey" jusqu'à l'index spécifié
             for i in range(len(self.dictionnaire), index):
-                self.dictionnaire["NotAkey"+str(i)] = None
+                self.dictionnaire["NotAkey" + str(i)] = None
+        # Insère la paire clé-valeur à l'index spécifié
         self.dictionnaire[key] = values
