@@ -5,7 +5,9 @@
 from .graph import Graphe
 from .BellmanFord import BellmanFord
 from .treeModule import Arbre, ArbreBinaire
-from .matriceModule import Matrice, MatriceEchelonneeReduite, MatriceBinaire, MatriceTriangulaire
+from .matriceModule import Matrice, Resolution, MatriceEchelonneeReduite, MatriceBinaire, MatriceTriangulaire
+
 
 # Déclarer les éléments à exposer lors de l'importation avec "*"
-__all__ = ["Graphe", "Arbre", "Matrice", "MatriceEchelonneeReduite", "MatriceBinaire", "MatriceTriangulaire", "ArbreBinaire", "BellmanFord"]
+__all__ = ["Graphe", "Arbre", "Matrice", "Resolution", "MatriceEchelonneeReduite", "MatriceBinaire", "MatriceTriangulaire", "BellmanFord", "ArbreBinaire"]
+
