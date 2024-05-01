@@ -1,5 +1,6 @@
 from EvoDict.graphsModule import Graphe
-from tabulate import tabulate
+import networkx as nx
+import matplotlib.pyplot as plt
 
 class GraphePondere(Graphe):
     """
@@ -39,15 +40,29 @@ class GraphePondere(Graphe):
         arrivee, poids = valeur[:-1], valeur[-1]
         if cle not in self.dictionnaire:
             self.dictionnaire[cle] = {}
-        self.dictionnaire[cle][arrivee] = poids
+        self.dictionnaire[cle][arrivee[0]] = poids
+
     
     def __str__(self):
         """
-        Retourne la représentation du graphe sous forme de tableau à l'aide de la bibliothèque tabulate.
+        Dessine le graphe pondéré avec les poids des arêtes inclus.
         """
-        headers = ["Noeud de départ", "Noeud d'arrivée", "Poids"]
-        data = []
+        # Créer un graphe dirigé à l'aide de networkx
+        G = nx.DiGraph()
+
+        # Ajouter les nœuds au graphe
         for depart, voisins in self.dictionnaire.items():
             for arrivee, poids in voisins.items():
-                data.append([depart, arrivee, poids])
-        return tabulate(data, headers=headers, tablefmt="grid")
+                G.add_edge(depart, arrivee, weight=poids)
+
+        # Dessiner le graphe
+        pos = nx.spring_layout(G)  # Positionnement des nœuds
+        nx.draw(G, pos, with_labels=True, node_size=800, node_color="skyblue", font_size=12, arrows=True)
+
+        # Ajouter les poids des arêtes
+        labels = nx.get_edge_attributes(G, "weight")
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+
+        # Afficher le graphe
+        plt.show()
+        return ""
