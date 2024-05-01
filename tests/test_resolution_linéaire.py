@@ -1,17 +1,20 @@
 from EvoDict import *
 
-# Création de la matrice A
-matrice_a = Matrice({
-    'row1': [2, 1, -1],
-    'row2': [-3, -1, 2],
-    'row3': [-2, 1, 2]
+# Création d'une matrice
+matrice = Matrice({
+    'ligne1': [2, 1, -1],
+    'ligne2': [-3, -1, 2],
+    'ligne3': [-2, 1, 2]
 })
 
 # Vecteur b
 vecteur_b = [8, -11, -3]
 
-# Résolution du système d'équations linéaires Ax = b
-solution = Resolution(matrice_a).resoudre_systeme_lineaire(vecteur_b)
+# Création d'une instance de la classe Resolution
+resol = Resolution(matrice)
+
+# Résolution du système d'équations linéaires
+solution = resol.resoudre_systeme_lineaire(vecteur_b)
 
 # Affichage de la solution
-print("La solution du système d'équations linéaires est :", solution)
+print("La solution du système d'équations linéaires Ax = b est :", solution)
