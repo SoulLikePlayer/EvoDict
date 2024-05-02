@@ -50,4 +50,4 @@ class BellmanFord(Graphe):
         for i in range(len(chemin) - 1):
             plus_court_chemin[chemin[i]] = [chemin[i + 1]]
 
-        return Graphe(plus_court_chemin).__str__()
+        return super.__init__(plus_court_chemin).__str__()
