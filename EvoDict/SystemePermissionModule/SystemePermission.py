@@ -1,6 +1,6 @@
 from EvoDict import Evodict
 
-class SystemePermissio(Evodict):
+class SystemePermission(Evodict):
     """
     Classe représentant un système de permissions basé sur un dictionnaire.
   
