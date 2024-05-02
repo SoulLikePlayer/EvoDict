@@ -40,6 +40,8 @@ class GraphePondere(Graphe):
         arrivee, poids = valeur[:-1], valeur[-1]
         if cle not in self.dictionnaire:
             self.dictionnaire[cle] = {}
+        if arrivee[0] not in self.dictionnaire:
+            self.dictionnaire[arrivee[0]] = {}  # Ajouter le sommet d'arrivée comme une nouvelle clé
         self.dictionnaire[cle][arrivee[0]] = poids
 
     

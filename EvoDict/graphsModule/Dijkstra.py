@@ -21,6 +21,7 @@ class Dijkstra(GraphePondere):
         self.dictionnaire = graphe.dictionnaire
         self.debut = debut if debut else next(iter(self.dictionnaire.keys()), None)
         self.fin = fin if fin else list(self.dictionnaire.keys())[-1]
+        print(self.dictionnaire)
 
     def __call__(self):
         """
@@ -59,8 +60,9 @@ class Dijkstra(GraphePondere):
             chemin_courant = predecesseur[chemin_courant]
 
         # Créer le nouveau graphe pondéré représentant le chemin le plus court
-        nouveau_graphe = super().__init__
+        nouveau_graphe = GraphePondere()
         for depart, arrivee, poids in chemin_plus_court:
             nouveau_graphe[depart] = [arrivee, poids]
         
-        return nouveau_graphe.__str__()
+        print(nouveau_graphe)
+        return nouveau_graphe
