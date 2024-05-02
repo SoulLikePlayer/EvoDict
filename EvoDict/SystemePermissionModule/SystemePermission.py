@@ -1,4 +1,5 @@
 from EvoDict import Evodict
+from tabulate import tabulate
 
 class SystemePermission(Evodict):
     """
@@ -28,3 +29,18 @@ class SystemePermission(Evodict):
             super().__setitem__(personne_ou_groupe, permissions)
         else:
             raise ValueError("Une ou plusieurs permissions spécifiées ne sont pas valides.")
+
+    def __str__(self):
+        """
+        Renvoie une représentation du système de permissions sous forme de tableau.
+        """
+        # Création de l'en-tête du tableau avec les permissions
+        headers = ["Personne ou Groupe"] + self.liste_permissions
+
+        # Création des données du tableau avec un "X" pour chaque permission associée à une personne ou groupe
+        data = []
+        for personne_ou_groupe, permissions in self.items():
+            row = [personne_ou_groupe] + ["X" if permission in permissions else "" for permission in self.liste_permissions]
+            data.append(row)
+
+        return tabulate(data, headers=headers, tablefmt="fancy_grid")
