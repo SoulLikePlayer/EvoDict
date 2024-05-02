@@ -3,7 +3,7 @@
 # Exposer les classes principales du package
 from .EvoDictModule import Evodict
 from .exceptionsModule import FusionError, ExportError, ImportationError
-from .graphsModule import Graphe, Arbre, Matrice, MatriceEchelonneeReduite, MatriceBinaire, MatriceTriangulaire, ArbreBinaire, BellmanFord, GraphePondere, Dijkstra
+from .graphsModule import Graphe, Arbre, Matrice, MatriceEchelonneeReduite, MatriceBinaire, MatriceTriangulaire, ArbreBinaire, BellmanFord, GraphePondere, Dijkstra, Resolution
 from .gestionRessourceModule import GestionRessource
 from .SystemePermissionModule import SystemePermission
 
