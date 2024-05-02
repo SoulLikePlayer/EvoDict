@@ -50,3 +50,8 @@ class GestionRessource(Evodict):
             bool: True si la quantité de ressource est disponible, False sinon.
         """
         return self.get(cle, 0) >= quantite
+
+    def get_ressource(self, cle = None):
+        if (cle == None) :
+            return self.dictionnaire
+        return self.dictionnaire[cle]
