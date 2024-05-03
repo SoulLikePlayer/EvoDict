@@ -1,6 +1,7 @@
 from tabulate import tabulate
 from pickle import *
 from EvoDict import *
+from EvoDict.EvoDictModule.evohistory import EvoHistory
 class Evodict:
     """
     Classe représentant un dictionnaire évolué.
@@ -30,6 +31,7 @@ class Evodict:
         self.not_a_key_counter = 0
          
         # Méthodes de manipulation du dictionnaire
+        self.historique = EvoHistory(self)
 
     def __getitem__(self, cle):
         """Renvoie la valeur associée à la clé spécifiée."""
@@ -57,6 +59,7 @@ class Evodict:
             self.dictionnaire[cle] = [valeur1, valeur2]
         else:
           self.dictionnaire[cle] = valeur
+          self.historique.commit(f"Ajout de la valeur {valeur} a la clé {cle}", self.dictionnaire)  
     
     def __delitem__(self, cle):
         """
