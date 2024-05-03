@@ -20,4 +20,6 @@ class EvoHistory:
     self.liste_commit[f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}"] = message
   
   def __str__(self):
-    return str(self.liste_commit)  
+    for cle, value in reversed(list(self.liste_commit.items())):
+      print(cle, "-->", value)
+    return ""  
