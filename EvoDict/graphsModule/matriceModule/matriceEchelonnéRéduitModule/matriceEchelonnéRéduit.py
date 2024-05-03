@@ -1,6 +1,15 @@
 from EvoDict.graphsModule.matriceModule import Matrice
 
 class MatriceEchelonneeReduite(Matrice):
+    """
+    Représentation d'une matrice échelonnée réduite.
+
+    Attributes:
+        dictionnaire (dict): Le dictionnaire contenant les données de la matrice.
+        nom_cle (str): Le nom utilisé pour désigner les clés dans le dictionnaire.
+        nom_valeur (str): Le nom utilisé pour désigner les valeurs dans le dictionnaire.
+    """
+
     def __init__(self, dictionnaire=None, cle="key", valeur="value"):
         """
         Initialise une matrice échelonnée réduite.
