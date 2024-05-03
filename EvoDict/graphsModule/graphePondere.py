@@ -40,9 +40,12 @@ class GraphePondere(Graphe):
         arrivee, poids = valeur[:-1], valeur[-1]
         if cle not in self.dictionnaire:
             self.dictionnaire[cle] = {}
+            self.historique.commit(f"Ajout de la clé '{cle}' vide")
         if arrivee[0] not in self.dictionnaire:
             self.dictionnaire[arrivee[0]] = {}  # Ajouter le sommet d'arrivée comme une nouvelle clé
+            self.historique.commit(f"Ajout du dictionnaire d'arrivé de '{arrivee[0]}'")
         self.dictionnaire[cle][arrivee[0]] = poids
+        self.historique.commit(f"Ajout du poids entre le noeud de départ '{cle}' et a l'arrivé '{arrivee[0]}'")
 
     
     def __str__(self):

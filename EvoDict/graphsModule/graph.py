@@ -44,6 +44,7 @@ class Graphe(Evodict):
         for value in valeur:
             if value not in list(self.dictionnaire.keys()):
                 self.dictionnaire[value] = []
+                self.historique.commit(f"Ajout de la clé '{cle}' vide")
 
     def __str__(self):
         """

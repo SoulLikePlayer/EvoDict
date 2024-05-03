@@ -15,11 +15,13 @@ class GestionRessource(Evodict):
         if (cle in self.dictionnaire.keys()):
             if (isinstance(valeur, int) or isinstance(valeur, float)):
                 self.dictionnaire[cle] += round(valeur, 2)  
+                self.historique.commit(f"Addition de la valeur dans {cle}'")
             else:
                 raise TypeError("Le type de valeurs ne peut pas être '{}', elle ne peut être que int et float".format(type(valeur).__name__))
         else:  
             if (isinstance(valeur, int) or isinstance(valeur, float)):
                 self.dictionnaire[cle] = round(valeur, 2)  
+                self.historique.commit(f"Ajout de la clé '{cle}' avec la valeur '{round(valeur, 2)}'")
             else:
                 raise TypeError("Le type de valeurs ne peut pas être '{}', elle ne peut être que int et float".format(type(valeur).__name__))
         
@@ -38,6 +40,7 @@ class GestionRessource(Evodict):
             raise ValueError("La quantité ne peut pas être négative.")
         else:
             self[cle] = quantite
+            self.historique.commit(f"mise a jour de '{cle}'")
 
     def verifier_disponibilite_ressource(self, cle, quantite):
         """
