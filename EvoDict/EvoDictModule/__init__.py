@@ -1,3 +1,3 @@
-from .evodict import Evodict
+from .evodict import Evodict, EvoHistory
 
-__all__ = ["EvoDict"]
+__all__ = ["Evodict", "EvoHistory"]
