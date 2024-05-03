@@ -3,6 +3,8 @@ from pickle import *
 from EvoDict.exceptionsModule import *
 import git
 import os
+import pygit2
+import sys
 
 class EvoHistory:
     def __init__(self):
@@ -11,13 +13,22 @@ class EvoHistory:
 
     def init_repo(self):
         # Obtient le chemin absolu du dossier contenant le fichier evodict.py
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        # Crée un dossier pour le dépôt Git s'il n'existe pas déjà
-        repo_path = os.path.join(current_dir, '.evodict_repo')
+        evodict_dir = os.path.dirname(os.path.abspath(__file__))
+        # Obtient le chemin absolu du dossier parent du dossier contenant evodict.py
+        calling_file_path = os.path.dirname(evodict_dir)
+        # Détermine le chemin du dépôt Git
+        repo_path = os.path.join(calling_file_path, '.evodict_repo')
+        # Vérifie si le dépôt Git existe déjà dans le répertoire
         if not os.path.exists(repo_path):
+            # Crée le dossier pour le dépôt Git s'il n'existe pas déjà
             os.makedirs(repo_path)
-        # Initialise un dépôt Git dans le dossier contenant evodict.py
-        return git.Repo.init(current_dir)
+            # Initialise un nouveau dépôt Git dans le dossier parent de evodict.py
+            self.repo = git.Repo.init(calling_file_path)
+        else:
+            # Charge le dépôt Git existant dans le dossier parent de evodict.py
+            self.repo = git.Repo(calling_file_path)
+        return self.repo
+
 
     def commit(self, message):
         # Obtient le chemin absolu du fichier evodict.py
@@ -28,6 +39,20 @@ class EvoHistory:
         self.repo.index.commit(message)
         # Met à jour l'historique des commits
         self.commit_main.append(message)
+
+    def visualize_branch(self):
+        # Ouvre le dépôt avec pygit2
+        repo = pygit2.Repository(self.repo.working_tree_dir)
+        # Obtient le nom de la branche actuelle
+        current_branch = repo.head.shorthand
+        branch_visualization = f"Visualisation de la branche '{current_branch}':\n"
+        # Construit le graphique de la branche
+        for commit in repo.walk(repo.head.target, pygit2.GIT_SORT_TOPOLOGICAL):
+            branch_visualization += f"Commit: {commit.hex[:7]} - {commit.message.strip()}\n"
+        return branch_visualization
+
+    def __str__(self):
+        return self.visualize_branch()
 
 class Evodict:
     """
