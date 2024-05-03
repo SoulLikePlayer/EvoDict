@@ -2,6 +2,7 @@ from tabulate import tabulate
 from pickle import *
 from EvoDict import *
 from EvoDict.exceptionsModule import *
+from evohistory import *
 
 class Evodict:
     """
@@ -33,6 +34,8 @@ class Evodict:
         self.nom_valeur = valeur
         # Compteur pour générer des clés uniques lors de la suppression de clés existantes
         self.not_a_key_counter = 0
+        # Historique du dictionnaire
+        self.historique = EvoHistory(self)
 
     # Méthodes spéciales pour la manipulation du dictionnaire
 
