@@ -9,7 +9,7 @@ class EvoHistory:
     self.dictionnaire_base = object.dictionnaire
     self.liste_dictionnaire = [self.dictionnaire_base]
     self.id = self.generer_id_random(4)
-    self.liste_commit = {f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}" : f"Création du {type(object).__name}"}
+    self.liste_commit = {f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}" : f"Création du {type(object).__name__}"}
     
   def generer_id_random(self, n):
     characters = string.ascii_uppercase + string.digits
@@ -18,3 +18,6 @@ class EvoHistory:
   def commit(self, message, dictionnaire):
     self.liste_dictionnaire.append(dictionnaire)
     self.liste_commit[f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}"] = message
+  
+  def __str__(self):
+    return str(self.liste_commit)  
