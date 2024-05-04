@@ -18,7 +18,7 @@ class GestionRessource(Evodict):
                 raise TypeError("Le type de valeurs ne peut pas être '{}', elle ne peut être que int et float".format(type(valeur).__name__))
         else:  
             if (isinstance(valeur, int) or isinstance(valeur, float)):
-                self.dictionnaire[cle] = round(valeur, 2)  
+                super().__setitem__(cle, round(valeur, 2))  
             else:
                 raise TypeError("Le type de valeurs ne peut pas être '{}', elle ne peut être que int et float".format(type(valeur).__name__))
         

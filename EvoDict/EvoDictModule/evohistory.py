@@ -8,8 +8,6 @@ class EvoHistory:
   Classe représentant l'historique des dictionnaire évolué
   '''
   def __init__(self, object) :
-    self.dictionnaire_base = object.dictionnaire
-    self.liste_dictionnaire = [self.dictionnaire_base]
     self.id = self.generer_id_random(4)
     self.liste_commit = {f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}" : f"Création du {type(object).__name__}"}
     # Création de l'interface graphique
@@ -29,8 +27,7 @@ class EvoHistory:
           self.tree.insert("", "end", text=commit[:16]+" : "+message)
         self.root.update()
 
-  def commit(self, message, dictionnaire):
-        self.liste_dictionnaire.append(dictionnaire)
+  def commit(self, message):
         self.liste_commit[f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}"] = message
         self.refresh_treeview()
     

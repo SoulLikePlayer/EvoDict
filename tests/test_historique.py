@@ -8,6 +8,4 @@ del dictionnaire["A"]
 dictionnaire["A"] = 1
 
 print(dictionnaire.historique)
-print(dictionnaire.historique.liste_dictionnaire)
-
 dictionnaire.historique()

@@ -62,7 +62,7 @@ class Evodict:
             self.dictionnaire[cle] = valeur
         # Ajoute le commit
         message = f"Ajout de la valeur {valeur} à la clé {cle}"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
         
     def __delitem__(self, cle):
         """
@@ -78,7 +78,7 @@ class Evodict:
             self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)
         # Ajoute le commit
         message = f"Suppression de la clé {cle}"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
         
     # Méthode de copie
     def __copy__(self):
@@ -133,28 +133,28 @@ class Evodict:
         self.dictionnaire.update(*args, **kwargs)
         # Ajoute le commit
         message = "Mise à jour du dictionnaire"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
 
     def pop(self, cle, *args):
         """Supprime et renvoie la valeur associée à la clé spécifiée."""
         return self.dictionnaire.pop(cle, *args)
         # Ajoute le commit
         message = f"Suppression de la clé {cle}"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
 
     def popitem(self):
         """Supprime et renvoie une paire (clé, valeur) arbitraire du dictionnaire."""
         return self.dictionnaire.popitem()
         # Ajoute le commit
         message = "Suppression d'une paire (clé, valeur) arbitraire"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
 
     def clear(self):
         """Supprime tous les éléments du dictionnaire."""
         self.dictionnaire.clear()
         # Ajoute le commit
         message = "Suppression de tous les éléments du dictionnaire"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
 
     def copy(self):
         """Renvoie une copie superficielle du dictionnaire."""
@@ -251,7 +251,7 @@ class Evodict:
                 self.dictionnaire[key] = value
         # Ajoute le commit
         message = "Fusion des informations avec un autre EvoDict"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
 
     def supprimeParIndex(self, index):
         """
@@ -268,7 +268,7 @@ class Evodict:
             print("L'indice spécifié est hors de la plage du dictionnaire.")
         # Ajoute le commit
         message = f"Suppression de la clé à l'index {index}"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
 
     def put(self, key, values, index):
         """
@@ -285,7 +285,7 @@ class Evodict:
         self.dictionnaire[key] = values
         # Ajoute le commit
         message = f"Insertion de la paire clé-valeur à l'index {index}"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
 
     # Méthode d'Export
     def export(self, File) :
@@ -297,7 +297,7 @@ class Evodict:
                 raise ExportError("Le nom du fichier ne doit pas être vide")    
         # Ajoute le commit
         message = "Export du dictionnaire vers un fichier"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
 
     # Méthode d'Import
     def Import(self, File):
@@ -308,7 +308,7 @@ class Evodict:
             raise ImportationError()
         # Ajoute le commit
         message = "Import du dictionnaire depuis un fichier"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
         
     def put(self, key, values, index):
         """
@@ -324,4 +324,4 @@ class Evodict:
                 self.dictionnaire["NotAkey"+str(i)] = None
         self.dictionnaire[key] = values
         message = f"Insertion de la paire clé-valeur à l'index {index}"
-        self.historique.commit(message, self.dictionnaire)
+        self.historique.commit(message)
