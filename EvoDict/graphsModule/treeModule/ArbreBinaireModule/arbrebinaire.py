@@ -45,13 +45,13 @@ class ArbreBinaire(Arbre):
             if isinstance(valeur, list) and len(valeur) > 2:
                 raise ValueError("Le nœud ne peut contenir plus de 2 fils")
             # Si le nœud a déjà 2 fils et que la valeur est une liste, lève une ValueError
-            if isinstance(self.dictionnaire[cle], list) and isinstance(valeur, list):
+            if isinstance(self.dictionnaire[cle], list) and isinstance(valeur, list) and len(self.dictionnaire[cle]) == 2 :
                 raise ValueError("Le nœud ne peut avoir plus de 2 fils")
             # Ajoute la valeur au nœud
             self.dictionnaire[cle].append(valeur)
         else:
             # Si la clé n'existe pas, crée une nouvelle entrée dans le dictionnaire avec la clé spécifiée et la valeur associée
-            self.dictionnaire[cle] = valeur
+            super().__setitem__(cle, valeur)
 
         # Vérifie si le nœud a maintenant plus de 2 fils et lève une ValueError le cas échéant
         if isinstance(self.dictionnaire[cle], list) and len(self.dictionnaire[cle]) > 2:

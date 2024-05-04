@@ -16,7 +16,8 @@ class TestVisualisationArbre(unittest.TestCase):
 
     def test_visualiser_arbre_equilibre(self):
         """Test de visualisation d'un arbre équilibré."""
-        arbre = Arbre({"A": ["B", "C"], "B": ["D", "E"], "C": ["F", "G"]})
+        arbre = Arbre({"B": ["D", "E"], "C": ["F", "G"]})
+        arbre["A"] = ["B", "C"]
         print("Visualisation de l'arbre équilibré :")
         print(arbre)
 
