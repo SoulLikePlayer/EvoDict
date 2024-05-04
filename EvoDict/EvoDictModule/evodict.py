@@ -30,7 +30,7 @@ class Evodict:
         self.nom_cle = cle
         self.nom_valeur = valeur
         self.not_a_key_counter = 0
-         
+        
         # Méthodes de manipulation du dictionnaire
         self.historique = EvoHistory(self)
 
@@ -51,17 +51,19 @@ class Evodict:
                     self.not_a_key_counter -= 1
                     break
         if (cle in self.dictionnaire.keys()) :
-          valeur2 = valeur
-          valeur1 = self.dictionnaire[cle]
-          if (isinstance(valeur1, list)):
-            valeur1.append(valeur2)
-            self.dictionnaire[cle] = valeur1
-          else:
-            self.dictionnaire[cle] = [valeur1, valeur2]
+            valeur2 = valeur
+            valeur1 = self.dictionnaire[cle]
+            if (isinstance(valeur1, list)):
+                valeur1.append(valeur2)
+                self.dictionnaire[cle] = valeur1
+            else:
+                self.dictionnaire[cle] = [valeur1, valeur2]
         else:
-          self.dictionnaire[cle] = valeur
-          self.historique.commit(f"Ajout de la valeur {valeur} a la clé {cle}", self.dictionnaire)  
-    
+            self.dictionnaire[cle] = valeur
+        # Ajoute le commit
+        message = f"Ajout de la valeur {valeur} à la clé {cle}"
+        self.historique.commit(message, self.dictionnaire)
+        
     def __delitem__(self, cle):
         """
         Supprime une clé et la remplace par une clé unique de type "NotAkey".
@@ -73,9 +75,12 @@ class Evodict:
             while not_a_key in self.dictionnaire:
                 self.not_a_key_counter += 1
                 not_a_key = "NotAkey" + str(self.not_a_key_counter)
-            self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)              
-     
-    #Methode de copie         
+            self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)
+        # Ajoute le commit
+        message = f"Suppression de la clé {cle}"
+        self.historique.commit(message, self.dictionnaire)
+        
+    # Méthode de copie
     def __copy__(self):
         """Renvoie une copie superficielle du dictionnaire."""
         return Evodict(self.dictionnaire.copy(), self.nom_cle, self.nom_valeur)     
@@ -84,8 +89,8 @@ class Evodict:
         """Renvoie une copie en profondeur du dictionnaire."""
         from copy import deepcopy
         return Evodict(deepcopy(self.dictionnaire, memo), self.nom_cle, self.nom_valeur) 
-    
-        # Méthodes de consultation du dictionnaire
+        
+    # Méthodes de consultation du dictionnaire
 
     def __contains__(self, cle):
         """Vérifie si une clé est présente dans le dictionnaire."""
@@ -126,18 +131,30 @@ class Evodict:
     def update(self, *args, **kwargs):
         """Met à jour le dictionnaire avec les éléments spécifiés."""
         self.dictionnaire.update(*args, **kwargs)
+        # Ajoute le commit
+        message = "Mise à jour du dictionnaire"
+        self.historique.commit(message, self.dictionnaire)
 
     def pop(self, cle, *args):
         """Supprime et renvoie la valeur associée à la clé spécifiée."""
         return self.dictionnaire.pop(cle, *args)
+        # Ajoute le commit
+        message = f"Suppression de la clé {cle}"
+        self.historique.commit(message, self.dictionnaire)
 
     def popitem(self):
         """Supprime et renvoie une paire (clé, valeur) arbitraire du dictionnaire."""
         return self.dictionnaire.popitem()
+        # Ajoute le commit
+        message = "Suppression d'une paire (clé, valeur) arbitraire"
+        self.historique.commit(message, self.dictionnaire)
 
     def clear(self):
         """Supprime tous les éléments du dictionnaire."""
         self.dictionnaire.clear()
+        # Ajoute le commit
+        message = "Suppression de tous les éléments du dictionnaire"
+        self.historique.commit(message, self.dictionnaire)
 
     def copy(self):
         """Renvoie une copie superficielle du dictionnaire."""
@@ -223,7 +240,7 @@ class Evodict:
                 if (value != self.dictionnaire[key]) :
                     current_value = self.dictionnaire[key]
                     if (isinstance(current_value, list)):
-                    # Si la valeur actuelle est une liste, nous étendons cette liste avec les nouvelles valeurs.
+                        # Si la valeur actuelle est une liste, nous étendons cette liste avec les nouvelles valeurs.
                         current_value.append(value)
                         self.dictionnaire[key] = sorted(current_value)
                     else:
@@ -232,6 +249,9 @@ class Evodict:
             else:
                 # Si la clé n'existe pas dans le dictionnaire actuel, nous l'ajoutons simplement avec sa valeur.
                 self.dictionnaire[key] = value
+        # Ajoute le commit
+        message = "Fusion des informations avec un autre EvoDict"
+        self.historique.commit(message, self.dictionnaire)
 
     def supprimeParIndex(self, index):
         """
@@ -246,23 +266,27 @@ class Evodict:
             del self.dictionnaire[key_to_delete]
         else:
             print("L'indice spécifié est hors de la plage du dictionnaire.")
+        # Ajoute le commit
+        message = f"Suppression de la clé à l'index {index}"
+        self.historique.commit(message, self.dictionnaire)
 
-    def rechercheParIndex(self, i):
+    def put(self, key, values, index):
         """
-        Recherche une paire clé-valeur par son index dans le dictionnaire.
- 
+        Insère une paire clé-valeur à un index spécifique dans le dictionnaire.
+
         Args:
-            i (int): L'index de la paire clé-valeur à rechercher.
+            key: La clé à insérer.
+            values: La valeur associée à la clé.
+            index: L'index où insérer la paire clé-valeur.
         """
-        if i in self.dictionnaire:
-            key = list(self.dictionnaire.keys())[i]
-            value = list(self.dictionnaire.values())[i]
-            headers = [self.nom_cle, self.nom_valeur, "index"]
-            data = [(key, value, i)]
-            print(tabulate(data, headers=headers, tablefmt="grid"))
-        else:
-            print("L'indice n'est pas dans le dictionnaire")
-    
+        if index > len(self.dictionnaire):
+            for i in range(len(self.dictionnaire), index):
+                self.dictionnaire["NotAkey"+str(i)] = None
+        self.dictionnaire[key] = values
+        # Ajoute le commit
+        message = f"Insertion de la paire clé-valeur à l'index {index}"
+        self.historique.commit(message, self.dictionnaire)
+
     # Méthode d'Export
     def export(self, File) :
         try :
@@ -271,15 +295,20 @@ class Evodict:
         except:
             if (File == ""):
                 raise ExportError("Le nom du fichier ne doit pas être vide")    
-    
+        # Ajoute le commit
+        message = "Export du dictionnaire vers un fichier"
+        self.historique.commit(message, self.dictionnaire)
+
     # Méthode d'Import
-    
     def Import(self, File):
         try:
             with open(File + ".txt", "rb") as f:
                 self.dictionnaire=load(f)
         except:
-            raise ImportationError()     
+            raise ImportationError()
+        # Ajoute le commit
+        message = "Import du dictionnaire depuis un fichier"
+        self.historique.commit(message, self.dictionnaire)
         
     def put(self, key, values, index):
         """
@@ -294,3 +323,5 @@ class Evodict:
             for i in range(len(self.dictionnaire), index):
                 self.dictionnaire["NotAkey"+str(i)] = None
         self.dictionnaire[key] = values
+        message = f"Insertion de la paire clé-valeur à l'index {index}"
+        self.historique.commit(message, self.dictionnaire)

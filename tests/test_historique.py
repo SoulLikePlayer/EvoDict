@@ -1,11 +1,13 @@
 from EvoDict import *
 
 dictionnaire = Evodict()
-dictionnaire2 = Evodict()
 
 dictionnaire["A"] = 2
-dictionnaire2["B"] = 50
+dictionnaire["B"] = 2
+del dictionnaire["A"]
+dictionnaire["A"] = 1
 
 print(dictionnaire.historique)
-print("----------------------")
-print(dictionnaire2.historique)
+print(dictionnaire.historique.liste_dictionnaire)
+
+dictionnaire.historique()

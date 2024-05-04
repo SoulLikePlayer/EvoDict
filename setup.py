@@ -10,6 +10,9 @@ setup(
     install_requires=[
         'tabulate',
         'networkx',
-        'matplotlib'
+        'matplotlib',
+        'string'
+        'tkinter',
+        'random'
     ],
 )
