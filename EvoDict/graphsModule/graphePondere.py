@@ -42,7 +42,9 @@ class GraphePondere(Graphe):
             super().__setitem__(cle, {})
         if arrivee[0] not in self.dictionnaire:
             self.dictionnaire[arrivee[0]] = {}  # Ajouter le sommet d'arrivée comme une nouvelle clé
+            self.historique.commit(f"Ajout de la déstination '{arrivee[0]}' au noeud '{cle}")
         self.dictionnaire[cle][arrivee[0]] = poids
+        self.historique.commit(f"Ajout du poids '{poids}' au chemin de {cle} jusqu'à {arrivee[0]}")
 
     
     def __str__(self):
