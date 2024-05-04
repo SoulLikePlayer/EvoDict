@@ -60,15 +60,10 @@ class Matrice(Graphe):
             # Si la valeur est un scalaire, cela signifie que nous mettons à jour une seule cellule de la matrice
             if len(self.dictionnaire[cle]) == 0:
                 # Si la ligne est vide, remplissez-la de zéros avant d'ajouter la valeur
-<<<<<<< HEAD
                 super().__setitem__(cle, [0] * len(list(self.dictionnaire.values())[0]))
             super().__setitem__(cle, valeur)
 # Méthode d'addition de matrices
-=======
-                self.dictionnaire[cle] = [0] * len(list(self.dictionnaire.values())[0])
-            self.dictionnaire[cle].append(valeur)  # Ajoutez la valeur à la ligne existante
 
->>>>>>> main
     def addition(self, other):
         """
         Additionne deux matrices.

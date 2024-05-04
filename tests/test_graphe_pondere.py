@@ -13,3 +13,4 @@ graph_pondere['C'] = ['D', 6]
 # Affichage du graphe pondéré
 print("Graphe pondéré :")
 print(graph_pondere)
+print(graph_pondere.historique)
