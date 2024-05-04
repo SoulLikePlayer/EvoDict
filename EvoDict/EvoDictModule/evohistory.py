@@ -35,9 +35,6 @@ class EvoHistory:
     self.root.mainloop()
   
   def __str__(self):
-    i = 0
     for cle, value in reversed(list(self.liste_commit.items())):
       print(cle, "-->", value)
-      print(i)
-      i += 1
     return ""

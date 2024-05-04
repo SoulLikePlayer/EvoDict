@@ -1,10 +1,11 @@
 from EvoDict import *
 
-dic_ressource = {"pierre" : 2,
-                    "bois" : 15}
+dic_ressource = {}
 
 Gestion = GestionRessource(dic_ressource)
 
+Gestion["pierre"] = 2
+Gestion["bois"] = 15
 Gestion["pierre"] = 5
 
 print(Gestion)
