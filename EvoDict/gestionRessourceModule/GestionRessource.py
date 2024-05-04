@@ -37,18 +37,12 @@ class GestionRessource(Evodict):
             # Si la clé existe déjà, ajoute la nouvelle valeur à la valeur existante
             if isinstance(valeur, int) or isinstance(valeur, float):
                 self.dictionnaire[cle] += round(valeur, 2)  
+                self.historique.commit(f"Adition de la valeur {round(valeur, 2)} a la clé {cle}")
             else:
                 raise TypeError("Le type de valeurs ne peut pas être '{}', elle ne peut être que int et float".format(type(valeur).__name__))
-<<<<<<< HEAD
         else:  
             if (isinstance(valeur, int) or isinstance(valeur, float)):
                 super().__setitem__(cle, round(valeur, 2))  
-=======
-        else:
-            # Si la clé n'existe pas, crée une nouvelle entrée dans le dictionnaire avec la clé spécifiée et la valeur associée
-            if isinstance(valeur, int) or isinstance(valeur, float):
-                self.dictionnaire[cle] = round(valeur, 2)  
->>>>>>> main
             else:
                 raise TypeError("Le type de valeurs ne peut pas être '{}', elle ne peut être que int et float".format(type(valeur).__name__))
 
