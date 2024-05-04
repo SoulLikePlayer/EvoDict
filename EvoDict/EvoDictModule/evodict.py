@@ -2,7 +2,6 @@ from tabulate import tabulate
 from pickle import *
 from EvoDict import *
 from EvoDict.EvoDictModule.evohistory import EvoHistory
-
 class Evodict:
     """
     Classe représentant un dictionnaire évolué.
