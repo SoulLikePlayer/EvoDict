@@ -2,6 +2,7 @@ from tabulate import tabulate
 from pickle import *
 from EvoDict import *
 from EvoDict.EvoDictModule.evohistory import EvoHistory
+from EvoDict.exceptionsModule import *
 class Evodict:
     """
     Classe représentant un dictionnaire évolué.
@@ -13,7 +14,7 @@ class Evodict:
         not_a_key_counter (int): Compteur utilisé pour générer des clés uniques pour les éléments supprimés.
     """
 
-    def __init__(self, dictionnaire=None, cle="key", valeur="value", estPaire = False, estImpaire = False, limMaxPaire = None):
+    def __init__(self, dictionnaire=None, cle="key", valeur="value", estPaire = False, estImpaire = False, limMaxPaire = None, estPositive = False, estNegative = False):
         """
         Initialise un nouvel EvoDict.
 
@@ -35,11 +36,19 @@ class Evodict:
         
         #association des contraintes de clé valeur
         self.estPaire = estPaire
+        if (self.estPaire == True):
+            for value in list(self.dictionnaire.values()) :
+                if ((value%2 != 0) and (isinstance(value, int))) :
+                    raise ConditionError("La condition estPaire n'est pas respécter inialement")
         self.estImpaire = estImpaire
+        if (self.estImpaire == True):
+            for value in list(self.dictionnaire.values()):
+                if ((value%2 != 0)and (isinstance(value, int))):
+                    raise ConditionError("La condition estImpaire n'est pas respécter initialement")
         self.limMaxPaire = limMaxPaire
-        if ((self.limMaxPaire != None) and (isinstance(self.limMaxPaire, int))):
+        if ((self.limMaxPaire != None)):
             if (len(list(self.dictionnaire.keys())) > self.limMaxPaire) :
-                pass
+                raise ConditionError(f"La taille maximum est initalement dépassé de {len(list(self.dictionnaire.keys())) - self.limMaxPaire}")
 
     def __getitem__(self, cle):
         """Renvoie la valeur associée à la clé spécifiée."""
