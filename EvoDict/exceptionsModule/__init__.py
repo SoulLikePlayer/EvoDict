@@ -4,6 +4,7 @@
 from .fusion_error import FusionError
 from .export_error import ExportError
 from .importation_error import ImportationError
+from .condition_error import ConditionError
 
 # Déclarer les éléments à exposer lors de l'importation avec "*"
-__all__ = ["FusionError", "ExportError", "ImportationError"]
+__all__ = ["FusionError", "ExportError", "ImportationError", "ConditionError"]
