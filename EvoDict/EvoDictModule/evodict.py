@@ -13,7 +13,7 @@ class Evodict:
         not_a_key_counter (int): Compteur utilisé pour générer des clés uniques pour les éléments supprimés.
     """
 
-    def __init__(self, dictionnaire=None, cle="key", valeur="value"):
+    def __init__(self, dictionnaire=None, cle="key", valeur="value", estPaire = False, estImpaire = False, limMaxPaire = None):
         """
         Initialise un nouvel EvoDict.
 
@@ -32,6 +32,14 @@ class Evodict:
         
         # Méthodes de manipulation du dictionnaire
         self.historique = EvoHistory(self)
+        
+        #association des contraintes de clé valeur
+        self.estPaire = estPaire
+        self.estImpaire = estImpaire
+        self.limMaxPaire = limMaxPaire
+        if ((self.limMaxPaire != None) and (isinstance(self.limMaxPaire, int))):
+            if (len(list(self.dictionnaire.keys())) > self.limMaxPaire) :
+                pass
 
     def __getitem__(self, cle):
         """Renvoie la valeur associée à la clé spécifiée."""

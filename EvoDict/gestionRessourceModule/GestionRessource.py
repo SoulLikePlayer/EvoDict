@@ -9,7 +9,7 @@ class GestionRessource(Evodict):
         Dictionnaire (dict): Le dictionnaire contenant les données.
     """
     
-    def __init__(self, dictionnaire=None):
+    def __init__(self, titre, dictionnaire=None):
         """
         Initialise un nouvel objet de la classe GestionRessource.
 
@@ -18,6 +18,7 @@ class GestionRessource(Evodict):
         """
         # Appel du constructeur de la classe parente avec les noms de clé et de valeur appropriés
         super().__init__(dictionnaire, "Objet", "Quantité")
+        self.titre = titre
 
     def __setitem__(self, cle, valeur):
         """
@@ -33,7 +34,8 @@ class GestionRessource(Evodict):
         Raises:
             TypeError: Si le type de valeur n'est ni int ni float.
         """
-        if cle in self.dictionnaire.keys():
+        print(type(self.dictionnaire).__name__)
+        if cle in list(self.dictionnaire.keys()):
             # Si la clé existe déjà, ajoute la nouvelle valeur à la valeur existante
             if isinstance(valeur, int) or isinstance(valeur, float):
                 self.dictionnaire[cle] += round(valeur, 2)  
@@ -62,7 +64,7 @@ class GestionRessource(Evodict):
         plt.bar(clefs, valeurs, color='blue')
         plt.xlabel(self.nom_cle)
         plt.ylabel(self.nom_valeur)
-        plt.title("Graphique de Gestion de Ressources")
+        plt.title(f"Graphique de Gestion de Ressources : {self.titre}")
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
         plt.show()
