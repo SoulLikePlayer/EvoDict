@@ -3,6 +3,8 @@ from pickle import *
 from EvoDict import *
 from EvoDict.EvoDictModule.evohistory import EvoHistory
 from EvoDict.exceptionsModule import *
+
+
 class Evodict:
     """
     Classe représentant un dictionnaire évolué.
@@ -14,7 +16,8 @@ class Evodict:
         not_a_key_counter (int): Compteur utilisé pour générer des clés uniques pour les éléments supprimés.
     """
 
-    def __init__(self, dictionnaire=None, cle="key", valeur="value", estPaire = False, estImpaire = False, limMaxPaire = None, estPositive = False, estNegative = False):
+    def __init__(self, dictionnaire=None, cle="key", valeur="value", estPaire=False, estImpaire=False,
+                 limMaxPaire=None, limMaxVal=None, estPositive=False, estNegative=False, estMutable=True):
         """
         Initialise un nouvel EvoDict.
 
@@ -30,106 +33,118 @@ class Evodict:
         self.nom_cle = cle
         self.nom_valeur = valeur
         self.not_a_key_counter = 0
-        
+
         # Méthodes de manipulation du dictionnaire
         self.historique = EvoHistory(self)
-        
-        #association des contraintes de clé valeur
+
+        # association des contraintes de clé valeur
+        # contraite de mutation
+        self.estMutable = estMutable
+        # contrainte de valeur pair
         self.estPaire = estPaire
-        if (self.estPaire == True):
-            for value in list(self.dictionnaire.values()) :
-                if ((value%2 != 0) and (isinstance(value, int))) :
-                    raise ConditionError("La condition estPaire n'est pas respécter inialement")
+        if self.estPaire:
+            for value in self.dictionnaire.values():
+                if value % 2 != 0 and isinstance(value, int):
+                    raise ConditionError("La condition estPaire n'est pas respectée initialement")
+        # contrainte de valeur impair
         self.estImpaire = estImpaire
-        if (self.estImpaire == True):
-            for value in list(self.dictionnaire.values()):
-                if ((value%2 != 0)and (isinstance(value, int))):
-                    raise ConditionError("La condition estImpaire n'est pas respécter initialement")
+        if self.estImpaire:
+            for value in self.dictionnaire.values():
+                if value % 2 != 0 and isinstance(value, int):
+                    raise ConditionError("La condition estImpaire n'est pas respectée initialement")
+        # contrainte de limite de paire clé-valeur
         self.limMaxPaire = limMaxPaire
-        if ((self.limMaxPaire != None)):
-            if (len(list(self.dictionnaire.keys())) > self.limMaxPaire) :
-                raise ConditionError(f"La taille maximum est initalement dépassé de {len(list(self.dictionnaire.keys())) - self.limMaxPaire}")
+        if self.limMaxPaire is not None:
+            if len(self.dictionnaire.keys()) > self.limMaxPaire:
+                raise ConditionError(
+                    f"La taille maximum est initalement dépassée de {len(list(self.dictionnaire.keys())) - self.limMaxPaire}")
 
     def __getitem__(self, cle):
         """Renvoie la valeur associée à la clé spécifiée."""
-        if (isinstance(self.dictionnaire[cle], list)):
-            for i in range(len(self.dictionnaire[cle])) : 
-                print(self.dictionnaire[cle][i]," ", end="")
-        else:   
+        if isinstance(self.dictionnaire[cle], list):
+            for i in range(len(self.dictionnaire[cle])):
+                print(self.dictionnaire[cle][i], " ", end="")
+        else:
             return self.dictionnaire[cle]
-        
+
     def __setitem__(self, cle, valeur):
         """Définit la valeur associée à la clé spécifiée."""
-        if (valeur in self.dictionnaire.values()):
-            for k, v in self.dictionnaire.items():
-                if ((v == valeur) and ("NotAkey" in k)):
-                    valeur = self.dictionnaire.pop(k)
-                    self.not_a_key_counter -= 1
-                    break
-        if (cle in self.dictionnaire.keys()) :
-            valeur2 = valeur
-            valeur1 = self.dictionnaire[cle]
-            if (isinstance(valeur1, list)):
-                valeur1.append(valeur2)
-                self.dictionnaire[cle] = valeur1
+        if ((self.estPaire and valeur % 2 == 0) or (self.estImpaire and valeur % 2 != 0) or self.estMutable):
+            if valeur in self.dictionnaire.values():
+                for k, v in self.dictionnaire.items():
+                    if v == valeur and "NotAkey" in k:
+                        valeur = self.dictionnaire.pop(k)
+                        self.not_a_key_counter -= 1
+                        break
+            if cle in self.dictionnaire.keys():
+                valeur2 = valeur
+                valeur1 = self.dictionnaire[cle]
+                if isinstance(valeur1, list):
+                    valeur1.append(valeur2)
+                    self.dictionnaire[cle] = valeur1
+                else:
+                    self.dictionnaire[cle] = [valeur1, valeur2]
             else:
-                self.dictionnaire[cle] = [valeur1, valeur2]
+                self.dictionnaire[cle] = valeur
+            # Ajoute le commit
+            message = f"Ajout de la valeur {valeur} à la clé {cle}"
+            self.historique.commit(message)
         else:
-            self.dictionnaire[cle] = valeur
-        # Ajoute le commit
-        message = f"Ajout de la valeur {valeur} à la clé {cle}"
-        self.historique.commit(message)
-        
+            raise ConditionError()
+
     def __delitem__(self, cle):
         """
         Supprime une clé et la remplace par une clé unique de type "NotAkey".
         La valeur associée reste dans le dictionnaire.
         """
-        if cle in self.dictionnaire:
-            self.not_a_key_counter += 1
-            not_a_key = "NotAkey" + str(self.not_a_key_counter)
-            while not_a_key in self.dictionnaire:
+        if self.estMutable:
+            if cle in self.dictionnaire:
                 self.not_a_key_counter += 1
                 not_a_key = "NotAkey" + str(self.not_a_key_counter)
-            self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)
-        # Ajoute le commit
-        message = f"Suppression de la clé {cle}"
-        self.historique.commit(message)
-        
+                while not_a_key in self.dictionnaire:
+                    self.not_a_key_counter += 1
+                    not_a_key = "NotAkey" + str(self.not_a_key_counter)
+                self.dictionnaire[not_a_key] = self.dictionnaire.pop(cle)
+            # Ajoute le commit
+            message = f"Suppression de la clé {cle}"
+            self.historique.commit(message)
+        else:
+            raise ConditionError()
+
     # Méthode de copie
     def __copy__(self):
         """Renvoie une copie superficielle du dictionnaire."""
-        return Evodict(self.dictionnaire.copy(), self.nom_cle, self.nom_valeur)     
-    
+        return Evodict(self.dictionnaire.copy(), self.nom_cle, self.nom_valeur)
+
     def __deepcopy__(self, memo):
         """Renvoie une copie en profondeur du dictionnaire."""
         from copy import deepcopy
-        return Evodict(deepcopy(self.dictionnaire, memo), self.nom_cle, self.nom_valeur) 
-        
+        return Evodict(deepcopy(self.dictionnaire, memo), self.nom_cle, self.nom_valeur)
+
     # Méthodes de consultation du dictionnaire
 
     def __contains__(self, cle):
         """Vérifie si une clé est présente dans le dictionnaire."""
-        return cle in self.dictionnaire                    
-    
+        return cle in self.dictionnaire
+
     def __iter__(self):
         """Renvoie un itérateur sur les clés du dictionnaire."""
         return iter(self.dictionnaire)
-    
+
     def __len__(self):
         """Renvoie le nombre de paires clé-valeur dans le dictionnaire."""
         return len(self.dictionnaire)
-    
+
     def __repr__(self):
         """Renvoie une représentation du dictionnaire."""
         return repr(self.dictionnaire)
-    
+
     def __str__(self):
         """Renvoie une représentation du dictionnaire sous forme de tableau."""
         headers = [self.nom_cle, self.nom_valeur]
         data = [(cle, valeur) for cle, valeur in self.dictionnaire.items()]
-        return tabulate(data, headers=headers, tablefmt="grid") 
-    
+        return tabulate(data, headers=headers, tablefmt="grid")
+
     # Autres méthodes de manipulation du dictionnaire
 
     def keys(self):
@@ -146,31 +161,44 @@ class Evodict:
 
     def update(self, *args, **kwargs):
         """Met à jour le dictionnaire avec les éléments spécifiés."""
-        self.dictionnaire.update(*args, **kwargs)
-        # Ajoute le commit
-        message = "Mise à jour du dictionnaire"
-        self.historique.commit(message)
+        if self.estMutable:
+            self.dictionnaire.update(*args, **kwargs)
+            # Ajoute le commit
+            message = "Mise à jour du dictionnaire"
+            self.historique.commit(message)
+        else:
+            raise ConditionError("Impossible de mettre à jour le dictionnaire, car estMutable est False.")
 
     def pop(self, cle, *args):
         """Supprime et renvoie la valeur associée à la clé spécifiée."""
-        return self.dictionnaire.pop(cle, *args)
-        # Ajoute le commit
-        message = f"Suppression de la clé {cle}"
-        self.historique.commit(message)
+        if self.estMutable:
+            # Ajoute le commit
+            message = f"Suppression de la clé {cle}"
+            self.historique.commit(message)
+
+            return self.dictionnaire.pop(cle, *args)
+        else:
+            raise ConditionError("Impossible de supprimer une clé, car estMutable est False.")
 
     def popitem(self):
         """Supprime et renvoie une paire (clé, valeur) arbitraire du dictionnaire."""
-        return self.dictionnaire.popitem()
-        # Ajoute le commit
-        message = "Suppression d'une paire (clé, valeur) arbitraire"
-        self.historique.commit(message)
+        if self.estMutable:
+            # Ajoute le commit
+            message = "Suppression d'une paire (clé, valeur) arbitraire"
+            self.historique.commit(message)
+            return self.dictionnaire.popitem()
+        else:
+            raise ConditionError("Impossible de supprimer une paire, car estMutable est False.")
 
     def clear(self):
         """Supprime tous les éléments du dictionnaire."""
-        self.dictionnaire.clear()
-        # Ajoute le commit
-        message = "Suppression de tous les éléments du dictionnaire"
-        self.historique.commit(message)
+        if self.estMutable:
+            self.dictionnaire.clear()
+            # Ajoute le commit
+            message = "Suppression de tous les éléments du dictionnaire"
+            self.historique.commit(message)
+        else:
+            raise ConditionError("Impossible de vider le dictionnaire, car estMutable est False.")
 
     def copy(self):
         """Renvoie une copie superficielle du dictionnaire."""
@@ -186,7 +214,7 @@ class Evodict:
 
     def setdefault(self, cle, default=None):
         """Renvoie la valeur associée à la clé spécifiée, en l'ajoutant au besoin avec une valeur par défaut."""
-        return self.dictionnaire.setdefault(cle, default) 
+        return self.dictionnaire.setdefault(cle, default)
     
     def __call__(self):
         """
@@ -276,32 +304,18 @@ class Evodict:
         Args:
             index (int): L'index de la clé à supprimer.
         """
-        keys = list(self.dictionnaire.keys())
-        if 0 <= index < len(keys):
-            key_to_delete = keys[index]
-            del self.dictionnaire[key_to_delete]
+        if (self.estMutable) :
+            keys = list(self.dictionnaire.keys())
+            if 0 <= index < len(keys):
+                key_to_delete = keys[index]
+                del self.dictionnaire[key_to_delete]
+            else:
+                print("L'indice spécifié est hors de la plage du dictionnaire.")
+            # Ajoute le commit
+            message = f"Suppression de la clé à l'index {index}"
+            self.historique.commit(message)
         else:
-            print("L'indice spécifié est hors de la plage du dictionnaire.")
-        # Ajoute le commit
-        message = f"Suppression de la clé à l'index {index}"
-        self.historique.commit(message)
-
-    def put(self, key, values, index):
-        """
-        Insère une paire clé-valeur à un index spécifique dans le dictionnaire.
-
-        Args:
-            key: La clé à insérer.
-            values: La valeur associée à la clé.
-            index: L'index où insérer la paire clé-valeur.
-        """
-        if index > len(self.dictionnaire):
-            for i in range(len(self.dictionnaire), index):
-                self.dictionnaire["NotAkey"+str(i)] = None
-        self.dictionnaire[key] = values
-        # Ajoute le commit
-        message = f"Insertion de la paire clé-valeur à l'index {index}"
-        self.historique.commit(message)
+            raise ConditionError("Impossible de supprimer la valeur car le dictionnaire n'est pas mutable")    
 
     # Méthode d'Export
     def export(self, File) :
@@ -335,9 +349,12 @@ class Evodict:
             values: La valeur associée à la clé.
             index: L'index où insérer la paire clé-valeur.
         """
-        if index > len(self.dictionnaire):
-            for i in range(len(self.dictionnaire), index):
-                self.dictionnaire["NotAkey"+str(i)] = None
-        self.dictionnaire[key] = values
-        message = f"Insertion de la paire clé-valeur à l'index {index}"
-        self.historique.commit(message)
+        if (self.estMutable):
+            if index > len(self.dictionnaire):
+                for i in range(len(self.dictionnaire), index):
+                    self.dictionnaire["NotAkey"+str(i)] = None
+            self.dictionnaire[key] = values
+            message = f"Insertion de la paire clé-valeur à l'index {index}"
+            self.historique.commit(message)
+        else:
+            raise ConditionError("Impossible d'insérer une nouvelle valeur ou clé a partir d'un index car le dictionnaire n'est pas mutable")    
