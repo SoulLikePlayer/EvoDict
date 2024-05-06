@@ -38,6 +38,7 @@ class Evodict:
         self.historique = EvoHistory(self)
 
         # association des contraintes de clé valeur
+        self.limClé = 0
         # contraite de mutation
         self.estMutable = estMutable
         # contrainte de valeur pair
@@ -55,9 +56,11 @@ class Evodict:
         # contrainte de limite de paire clé-valeur
         self.limMaxPaire = limMaxPaire
         if self.limMaxPaire is not None:
-            if len(self.dictionnaire.keys()) > self.limMaxPaire:
+            if len(list(self.dictionnaire.keys())) > self.limMaxPaire:
                 raise ConditionError(
                     f"La taille maximum est initalement dépassée de {len(list(self.dictionnaire.keys())) - self.limMaxPaire}")
+            else :
+                self.limClé = len(list(self.dictionnaire.keys()))
 
     def __getitem__(self, cle):
         """Renvoie la valeur associée à la clé spécifiée."""
@@ -69,7 +72,7 @@ class Evodict:
 
     def __setitem__(self, cle, valeur):
         """Définit la valeur associée à la clé spécifiée."""
-        if ((self.estPaire and valeur % 2 == 0) or (self.estImpaire and valeur % 2 != 0) or self.estMutable):
+        if ((self.estPaire and valeur % 2 == 0) or (self.estImpaire and valeur % 2 != 0) or self.estMutable or (self.limMaxPaire != None and (len(list(self.dictionnaire.keys())) + self.limClé <= self.limMaxPaire))):
             if valeur in self.dictionnaire.values():
                 for k, v in self.dictionnaire.items():
                     if v == valeur and "NotAkey" in k:
