@@ -39,6 +39,8 @@ class Evodict:
 
         # association des contraintes de clé valeur
         self.limClé = 0
+        # association de limite de valeur
+        self.limVal = 0
         # contraite de mutation
         self.estMutable = estMutable
         # contrainte de valeur pair
@@ -61,6 +63,13 @@ class Evodict:
                     f"La taille maximum est initalement dépassée de {len(list(self.dictionnaire.keys())) - self.limMaxPaire}")
             else :
                 self.limClé = len(list(self.dictionnaire.keys()))
+        # contrainte de limite de valeur
+        self.limMaxVal = limMaxVal
+        if (self.limMaxVal is not None):
+            for cle in self.dictionnaire.keys():
+                if (isinstance(self.dictionnaire[cle], list) and len(self.dictionnaire[cle]) > self.limMaxVal):
+                    raise ConditionError(f"le nombre de valeur associé a la clé '{cle}' est supérieur a '{self.limMaxVal}'")
+                         
 
     def __getitem__(self, cle):
         """Renvoie la valeur associée à la clé spécifiée."""
@@ -80,12 +89,19 @@ class Evodict:
                         self.not_a_key_counter -= 1
                         break
             if cle in self.dictionnaire.keys():
+                if (self.limMaxVal != None):
+                    self.limVal = len(self.dictionnaire[cle])
                 valeur2 = valeur
                 valeur1 = self.dictionnaire[cle]
                 if isinstance(valeur1, list):
+                    if(self.limMaxVal != None):
+                        if (len(self.dictionnaire[cle]) + self.limVal > self.limMaxVal) : 
+                            raise ConditionError(f"La limite de valeur est atteint pour la clé {cle}")
                     valeur1.append(valeur2)
                     self.dictionnaire[cle] = valeur1
                 else:
+                    if(self.limMaxVal == 1):
+                        raise ConditionError(f"La limite de valeur est atteint pour la clé {cle}")
                     self.dictionnaire[cle] = [valeur1, valeur2]
             else:
                 self.dictionnaire[cle] = valeur
