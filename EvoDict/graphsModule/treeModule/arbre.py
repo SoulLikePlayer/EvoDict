@@ -12,7 +12,7 @@ class Arbre(Graphe):
         nom_valeur (str): Le nom utilisé pour désigner les valeurs dans le dictionnaire.
     """
 
-    def __init__(self, limMaxVal = None, dictionnaire=None, cle="key", valeur="value"):
+    def __init__(self, dictionnaire=None, cle="key", valeur="value", limMaxVal = None):
         """
         Initialise un nouvel objet de la classe Arbre.
 
@@ -22,7 +22,8 @@ class Arbre(Graphe):
             valeur (str, optional): Le nom à utiliser pour les valeurs dans le dictionnaire. Par défaut, "value".
         """
         # Appel du constructeur de la classe parente avec les noms de clé et de valeur appropriés
-        super().__init__( limMaxVal, dictionnaire, cle, valeur)
+        print(type(limMaxVal).__name__)
+        super().__init__(dictionnaire, cle, valeur, limMaxVal)
 
     def __setitem__(self, cle, valeur):
         """
@@ -50,5 +51,75 @@ class Arbre(Graphe):
         Returns:
             str: Une chaîne vide, car l'affichage du graphe est géré par matplotlib.
         """
-        # Appel de la méthode de la classe parente pour afficher le dictionnaire sous forme de graphe dirigé
-        return super().__str__()
+
+
+        G = nx.DiGraph()
+
+        def add_edges(node, children):
+            for child in children:
+                G.add_edge(node, child)
+                if child in self.dictionnaire:
+                    add_edges(child, self.dictionnaire[child])
+
+        root = next(iter(self.dictionnaire.keys()), None)
+        if root is not None:
+            add_edges(root, self.dictionnaire[root])
+
+        pos = nx.shell_layout(G)
+        nx.draw(G, pos, with_labels=True, arrows=True)
+        plt.show()
+
+        return ""
+
+    def parcours_prefixe(self):
+        """
+        Parcours préfixe de l'arbre.
+        """
+        def parcours(node):
+            if node is None:
+                return
+            print(node, end=" ")
+            for child in self.dictionnaire.get(node, []):
+                parcours(child)
+
+        root = next(iter(self.dictionnaire.keys()), None)
+        parcours(root)
+        print()
+
+    def parcours_infixe(self):
+        """
+        Parcours infixe de l'arbre.
+        """
+        def parcours(node):
+            if node is None:
+                return
+            children = self.dictionnaire.get(node, [])
+            if len(children) >= 2:
+                parcours(children[0])
+                print(node, end=" ")
+                for child in children[1:]:
+                    parcours(child)
+            elif len(children) == 1:
+                parcours(children[0])
+                print(node, end=" ")
+            else:
+                print(node, end=" ")
+
+        root = next(iter(self.dictionnaire.keys()), None)
+        parcours(root)
+        print()
+
+    def parcours_postfixe(self):
+        """
+        Parcours postfixe de l'arbre.
+        """
+        def parcours(node):
+            if node is None:
+                return
+            for child in self.dictionnaire.get(node, []):
+                parcours(child)
+            print(node, end=" ")
+
+        root = next(iter(self.dictionnaire.keys()), None)
+        parcours(root)
+        print()
