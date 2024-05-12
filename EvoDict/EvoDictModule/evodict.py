@@ -74,16 +74,16 @@ class Evodict:
             self.nombre_parents_par_valeur = {}
             for key, values in self.dictionnaire.items() :
                 if (isinstance(self.dictionnaire[key], list)):
-                    for elt in self.dictionnnaire[key]:
+                    for elt in self.dictionnaire[key]:
                         if elt in self.nombre_parents_par_valeur :
                             self.nombre_parents_par_valeur[elt] += 1
                         else:  
-                            self.nombre_parents_par_valeur[values] = 0
+                            self.nombre_parents_par_valeur[elt] = 1
                 else:
-                    if self.dictionnaire[key] in self.nombre_parents_par_valeur:            
-                        self.nombre_parents_par_valeur[elt] += 1
+                    if values in self.nombre_parents_par_valeur:            
+                        self.nombre_parents_par_valeur[values] += 1
                     else:  
-                        self.nombre_parents_par_valeur[values] = 0
+                        self.nombre_parents_par_valeur[values] = 1
             for key in self.nombre_parents_par_valeur.keys():
                 if (self.nombre_parents_par_valeur[key] > self.limMaxParent):
                     raise ConditionError()             
@@ -115,13 +115,27 @@ class Evodict:
                     if(self.limMaxVal != None):
                         if (len(self.dictionnaire[cle]) + self.limVal > self.limMaxVal) : 
                             raise ConditionError(f"La limite de valeur est atteint pour la clé {cle}")
+                    elif (self.limMaxParent != None):
+                        if (self.nombre_parents_par_valeur[valeur] > (self.limMaxParent - 1)):
+                            raise ConditionError()
+                        self.nombre_parents_par_valeur[valeur] += 1    
                     valeur1.append(valeur2)
                     self.dictionnaire[cle] = valeur1
                 else:
                     if(self.limMaxVal == 1):
                         raise ConditionError(f"La limite de valeur est atteint pour la clé {cle}")
+                    elif (self.limMaxParent != None):
+                        if (self.nombre_parents_par_valeur[valeur] > (self.limMaxParent - 1)):
+                            raise ConditionError()
+                        self.nombre_parents_par_valeur[valeur] += 1
                     self.dictionnaire[cle] = [valeur1, valeur2]
             else:
+                if(self.limMaxVal == 1):
+                        raise ConditionError(f"La limite de valeur est atteint pour la clé {cle}")
+                elif (self.limMaxParent != None):
+                        if (self.nombre_parents_par_valeur[valeur] > (self.limMaxParent - 1)):
+                            raise ConditionError()
+                        self.nombre_parents_par_valeur[valeur] += 1    
                 self.dictionnaire[cle] = valeur
             # Ajoute le commit
             message = f"Ajout de la valeur {valeur} à la clé {cle}"
