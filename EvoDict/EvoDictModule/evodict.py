@@ -16,8 +16,7 @@ class Evodict:
         not_a_key_counter (int): Compteur utilisé pour générer des clés uniques pour les éléments supprimés.
     """
 
-    def __init__(self, dictionnaire=None, cle="key", valeur="value", estPaire=False, estImpaire=False,
-                 limMaxPaire=None, limMaxVal=None, estPositive=False, estNegative=False, estMutable=True):
+    def __init__(self, dictionnaire=None, cle="key", valeur="value", estPaire=False, estImpaire=False, limMaxPaire=None, limMaxVal=None, limMaxParent = None, estPositive=False, estNegative=False, estMutable=True):
         """
         Initialise un nouvel EvoDict.
 
@@ -69,6 +68,25 @@ class Evodict:
             for cle in self.dictionnaire.keys():
                 if (isinstance(self.dictionnaire[cle], list) and len(self.dictionnaire[cle]) > self.limMaxVal):
                     raise ConditionError(f"le nombre de valeur associé a la clé '{cle}' est supérieur a '{self.limMaxVal}'")
+        # contrainte de limite de parent
+        self.limMaxParent = limMaxParent
+        if (self.limMaxParent is not None):
+            self.nombre_parents_par_valeur = {}
+            for key, values in self.dictionnaire.items() :
+                if (isinstance(self.dictionnaire[key], list)):
+                    for elt in self.dictionnnaire[key]:
+                        if elt in self.nombre_parents_par_valeur :
+                            self.nombre_parents_par_valeur[elt] += 1
+                        else:  
+                            self.nombre_parents_par_valeur[values] = 0
+                else:
+                    if self.dictionnaire[key] in self.nombre_parents_par_valeur:            
+                        self.nombre_parents_par_valeur[elt] += 1
+                    else:  
+                        self.nombre_parents_par_valeur[values] = 0
+            for key in self.nombre_parents_par_valeur.keys():
+                if (self.nombre_parents_par_valeur[key] > self.limMaxParent):
+                    raise ConditionError()             
                          
 
     def __getitem__(self, cle):

@@ -21,8 +21,7 @@ class Graphe(Evodict):
             cle (str, optional): Le nom à utiliser pour les clés dans le dictionnaire. Par défaut, "key".
             valeur (str, optional): Le nom à utiliser pour les valeurs dans le dictionnaire. Par défaut, "value".
         """
-        # Appel du constructeur de la classe parente avec les noms de clé et de valeur appropriés
-        print(type(limMaxVal).__name__)
+        # Appel du constructeur de la classe parente avec les noms de clé et de valeur appropriée
         super().__init__(dictionnaire, cle, valeur, limMaxVal=limMaxVal)
 
     def __setitem__(self, cle, valeur):
