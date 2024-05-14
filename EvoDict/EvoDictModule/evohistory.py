@@ -37,7 +37,21 @@ class EvoHistory:
         self.dictionnaire = copy.deepcopy(self.object.dictionnaire)
         self.liste_dictionnaire.append(self.dictionnaire)
         self.refresh_treeview()
-    
+        
+  def reset(self, nb = 1, hard = False):
+     if (hard):
+       self.object.dictionnaire = self.liste_dictionnaire[0]     
+     else:
+       self.object.dictionnaire = self.liste_dictionnaire[len(self.liste_dictionnaire) - nb - 1]
+     taille = len(self.liste_dictionnaire)-1
+     suppr = True
+     while (taille >= 0):
+       if(self.liste_dictionnaire[taille] != self.object.dictionnaire and suppr == True):
+         del self.liste_dictionnaire[taille]
+       elif(self.liste_dictionnaire[taille] == self.object.dictionnaire):
+         suppr = False  
+       taille -= 1
+          
   def __call__(self):
     self.root.mainloop()
   
