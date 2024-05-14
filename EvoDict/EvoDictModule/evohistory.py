@@ -2,14 +2,19 @@ import random
 import string
 import tkinter as tk
 from tkinter import ttk
+import copy
 
 class EvoHistory:
   '''
   Classe représentant l'historique des dictionnaire évolué
   '''
   def __init__(self, object) :
+    self.object = object
+    self.dictionnaire_base = copy.deepcopy(object.dictionnaire)
     self.id = self.generer_id_random(4)
     self.liste_commit = {f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}" : f"Création du {type(object).__name__}"}
+    self.liste_dictionnaire = []
+    self.liste_dictionnaire.append(self.dictionnaire_base)
     # Création de l'interface graphique
     self.root = tk.Tk()
     self.root.title(f"EvoHistory {self.id}")
@@ -29,6 +34,8 @@ class EvoHistory:
 
   def commit(self, message):
         self.liste_commit[f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}"] = message
+        self.dictionnaire = copy.deepcopy(self.object.dictionnaire)
+        self.liste_dictionnaire.append(self.dictionnaire)
         self.refresh_treeview()
     
   def __call__(self):

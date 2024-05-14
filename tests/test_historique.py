@@ -9,3 +9,4 @@ dictionnaire["A"] = 1
 
 print(dictionnaire.historique)
 dictionnaire.historique()
+print(dictionnaire.historique.liste_dictionnaire)
