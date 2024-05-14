@@ -3,6 +3,7 @@ import string
 import tkinter as tk
 from tkinter import ttk
 import copy
+#from EvoDict import EvoHistoryError
 
 class EvoHistory:
   '''
@@ -13,8 +14,10 @@ class EvoHistory:
     self.dictionnaire_base = copy.deepcopy(object.dictionnaire)
     self.id = self.generer_id_random(4)
     self.liste_commit = {f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}" : f"Création du {type(object).__name__}"}
-    self.liste_dictionnaire = []
-    self.liste_dictionnaire.append(self.dictionnaire_base)
+    self.liste_dictionnaire = {"main" : []}
+    self.liste_dictionnaire["main"].append(self.dictionnaire_base)
+    
+    self.branche_actuelle = "main"
     # Création de l'interface graphique
     self.root = tk.Tk()
     self.root.title(f"EvoHistory {self.id}")
@@ -35,22 +38,34 @@ class EvoHistory:
   def commit(self, message):
         self.liste_commit[f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}"] = message
         self.dictionnaire = copy.deepcopy(self.object.dictionnaire)
-        self.liste_dictionnaire.append(self.dictionnaire)
+        self.liste_dictionnaire[self.branche_actuelle].append(self.dictionnaire)
         self.refresh_treeview()
         
   def reset(self, nb = 1, hard = False):
      if (hard):
-       self.object.dictionnaire = self.liste_dictionnaire[0]     
+       self.object.dictionnaire = self.liste_dictionnaire[self.branche_actuelle][0]     
      else:
-       self.object.dictionnaire = self.liste_dictionnaire[len(self.liste_dictionnaire) - nb - 1]
-     taille = len(self.liste_dictionnaire)-1
+       self.object.dictionnaire = self.liste_dictionnaire[self.branche_actuelle][len(self.liste_dictionnaire) - nb]
+     taille = len(self.liste_dictionnaire[self.branche_actuelle])-1
      suppr = True
      while (taille >= 0):
-       if(self.liste_dictionnaire[taille] != self.object.dictionnaire and suppr == True):
-         del self.liste_dictionnaire[taille]
-       elif(self.liste_dictionnaire[taille] == self.object.dictionnaire):
+       if(self.liste_dictionnaire[self.branche_actuelle][taille] != self.object.dictionnaire and suppr == True):
+         del self.liste_dictionnaire[self.branche_actuelle][taille]
+       elif(self.liste_dictionnaire[self.branche_actuelle][taille] == self.object.dictionnaire):
          suppr = False  
        taille -= 1
+  
+  def branch(self, nom_de_branche, copy_dict = False):
+    self.liste_dictionnaire[nom_de_branche] = []
+    if (copy_dict):
+      for element in self.liste_dictionnaire[self.branche_actuelle]:
+        self.liste_dictionnaire[nom_de_branche].append(copy.deepcopy(element))  
+  
+  def checkout(self, nom_de_branche):
+    #if (nom_de_branche not in list(self.liste_dictionnaire.keys())):
+      #raise EvoHistoryError("Vous ne pouvez qu'accédez au branche que vous avez crée avant avec la commande branch")
+    self.branche_actuelle = nom_de_branche
+    self.object.dictionnaire = self.liste_dictionnaire[self.branche_actuelle][-1]
           
   def __call__(self):
     self.root.mainloop()
