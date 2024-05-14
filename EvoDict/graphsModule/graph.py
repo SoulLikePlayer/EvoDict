@@ -12,7 +12,7 @@ class Graphe(Evodict):
         nom_valeur (str): Le nom utilisé pour désigner les valeurs dans le dictionnaire.
     """
 
-    def __init__(self, dictionnaire=None, cle="key", valeur="value", limMaxVal = None):
+    def __init__(self, dictionnaire=None, cle="key", valeur="value", limMaxVal = None, limMaxParent = None):
         """
         Initialise un nouvel objet de la classe Graphe.
 
@@ -22,7 +22,7 @@ class Graphe(Evodict):
             valeur (str, optional): Le nom à utiliser pour les valeurs dans le dictionnaire. Par défaut, "value".
         """
         # Appel du constructeur de la classe parente avec les noms de clé et de valeur appropriée
-        super().__init__(dictionnaire, cle, valeur, limMaxVal=limMaxVal)
+        super().__init__(dictionnaire, cle, valeur, limMaxVal=limMaxVal, limMaxParent=limMaxParent)
 
     def __setitem__(self, cle, valeur):
         """
@@ -43,7 +43,9 @@ class Graphe(Evodict):
         # Ajout des valeurs comme des clés avec des listes vides comme valeurs associées
         for value in valeur:
             if value not in list(self.dictionnaire.keys()):
-                super().__setitem__(cle, [])
+                self.dictionnaire[cle] = []
+                self.historique.commit(f"Ajout du sommet {cle}")
+        print(self.dictionnaire, end="\n\n")        
 
     def __str__(self):
         """

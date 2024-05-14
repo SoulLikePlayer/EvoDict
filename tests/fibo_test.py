@@ -1,5 +1,5 @@
 import unittest
-from EvoDict import EvoDict
+from EvoDict import Evodict
 
 def fibonacci(n):
     """Retourne les n premiers nombres de la suite de Fibonacci."""
@@ -11,7 +11,7 @@ def fibonacci(n):
 class TestEvoDictSetItem(unittest.TestCase):
     def test_setitem_fibonacci(self):
         # Création d'une instance de EvoDict
-        evodict = EvoDict(None, "Index", "Valeur")
+        evodict = Evodict(None, "Index", "Valeur")
 
         # Obtention des 10 premiers nombres de la suite de Fibonacci
         fibo_values = fibonacci(10)

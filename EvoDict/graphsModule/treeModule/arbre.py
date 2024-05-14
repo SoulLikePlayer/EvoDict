@@ -22,7 +22,7 @@ class Arbre(Graphe):
             valeur (str, optional): Le nom à utiliser pour les valeurs dans le dictionnaire. Par défaut, "value".
         """
         # Appel du constructeur de la classe parente avec les noms de clé et de valeur appropriés
-        super().__init__(dictionnaire, cle, valeur, limMaxVal)
+        super().__init__(dictionnaire, cle, valeur, limMaxVal, 1)
 
     def __setitem__(self, cle, valeur):
         """

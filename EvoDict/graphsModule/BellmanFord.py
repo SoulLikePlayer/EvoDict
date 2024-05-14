@@ -33,7 +33,7 @@ class BellmanFord(Graphe):
         for _ in range(len(self.dictionnaire) - 1):
             for u in self.dictionnaire:
                 for v in self.dictionnaire[u]:
-                    poids = 1  # Nous supposons que tous les poids sont égaux à 1 pour cet exemple
+                    poids = 1  # Nous supposons que tous les poids sont égaux à 1
                     if distances[u] + poids < distances[v]:
                         distances[v] = distances[u] + poids
                         predecesseurs[v] = u
@@ -46,8 +46,9 @@ class BellmanFord(Graphe):
         chemin.reverse()
         
         # Créer un nouveau dictionnaire représentant le plus court chemin
-        plus_court_chemin = {}
+        plus_court_chemin = Graphe()
         for i in range(len(chemin) - 1):
             plus_court_chemin[chemin[i]] = [chemin[i + 1]]
 
-        return super.__init__(plus_court_chemin).__str__()
+        print(plus_court_chemin)
+        return plus_court_chemin

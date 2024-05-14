@@ -71,3 +71,7 @@ class GestionRessource(Evodict):
 
         # Renvoie une chaîne vide car l'affichage du graphique est géré par matplotlib
         return ""
+    
+    def fusions(self, other):
+        self.titre = "Fusions de " +self.titre + " et de " +other.titre
+        return super().fusions(other)
