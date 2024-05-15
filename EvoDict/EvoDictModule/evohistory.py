@@ -13,7 +13,7 @@ class EvoHistory:
     self.object = object
     self.dictionnaire_base = copy.deepcopy(object.dictionnaire)
     self.id = self.generer_id_random(4)
-    self.liste_commit = {f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}" : f"Création du {type(object).__name__}"}
+    self.liste_commit = {"main": {f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}" : f"Création du {type(object).__name__}"}}
     self.liste_dictionnaire = {"main" : []}
     self.liste_dictionnaire["main"].append(self.dictionnaire_base)
     
@@ -36,7 +36,7 @@ class EvoHistory:
         self.root.update()
 
   def commit(self, message):
-        self.liste_commit[f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}"] = message
+        self.liste_commit[self.branche_actuelle][f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}"] = message
         self.dictionnaire = copy.deepcopy(self.object.dictionnaire)
         self.liste_dictionnaire[self.branche_actuelle].append(self.dictionnaire)
         self.refresh_treeview()
@@ -57,6 +57,7 @@ class EvoHistory:
   
   def branch(self, nom_de_branche, copy_dict = False):
     self.liste_dictionnaire[nom_de_branche] = []
+    self.liste_commit[nom_de_branche] = []
     if (copy_dict):
       for element in self.liste_dictionnaire[self.branche_actuelle]:
         self.liste_dictionnaire[nom_de_branche].append(copy.deepcopy(element))  
@@ -66,6 +67,7 @@ class EvoHistory:
       raise EvoHistoryError("Vous ne pouvez qu'accédez au branche que vous avez crée avant avec la commande branch")
     self.branche_actuelle = nom_de_branche
     self.object.dictionnaire = self.liste_dictionnaire[self.branche_actuelle][-1]
+    print(f"switch a la branche {self.branche_actuelle}")
           
   def __call__(self):
     self.root.mainloop()
