@@ -9,7 +9,8 @@ dictionnaire["A"] = 1
 
 dictionnaire.historique.branch("test", True)
 
-print(dictionnaire.historique)
 dictionnaire.historique.reset(hard=True)
-print(dictionnaire)
-print(dictionnaire.historique.liste_dictionnaire)
+
+dictionnaire.historique.checkout("test")
+
+dictionnaire.historique()
