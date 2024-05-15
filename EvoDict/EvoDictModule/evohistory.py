@@ -3,7 +3,7 @@ import string
 import tkinter as tk
 from tkinter import ttk
 import copy
-#from EvoDict import EvoHistoryError
+from EvoDict.exceptionsModule import EvoHistoryError
 
 class EvoHistory:
   '''
@@ -62,8 +62,8 @@ class EvoHistory:
         self.liste_dictionnaire[nom_de_branche].append(copy.deepcopy(element))  
   
   def checkout(self, nom_de_branche):
-    #if (nom_de_branche not in list(self.liste_dictionnaire.keys())):
-      #raise EvoHistoryError("Vous ne pouvez qu'accédez au branche que vous avez crée avant avec la commande branch")
+    if (nom_de_branche not in list(self.liste_dictionnaire.keys())):
+      raise EvoHistoryError("Vous ne pouvez qu'accédez au branche que vous avez crée avant avec la commande branch")
     self.branche_actuelle = nom_de_branche
     self.object.dictionnaire = self.liste_dictionnaire[self.branche_actuelle][-1]
           
