@@ -12,7 +12,7 @@ class Graphe(Evodict):
         nom_valeur (str): Le nom utilisé pour désigner les valeurs dans le dictionnaire.
     """
 
-    def __init__(self, dictionnaire=None, cle="key", valeur="value", limMaxVal = None, limMaxParent = None):
+    def __init__(self, dictionnaire=None, cle="key", valeur="value", lmv = None, lmp = None):
         """
         Initialise un nouvel objet de la classe Graphe.
 
@@ -22,7 +22,7 @@ class Graphe(Evodict):
             valeur (str, optional): Le nom à utiliser pour les valeurs dans le dictionnaire. Par défaut, "value".
         """
         # Appel du constructeur de la classe parente avec les noms de clé et de valeur appropriée
-        super().__init__(dictionnaire, cle, valeur, limMaxVal=limMaxVal, limMaxParent=limMaxParent)
+        super().__init__(dictionnaire, cle, valeur, limMaxVal=lmv, limMaxParent=lmp)
 
     def __setitem__(self, cle, valeur):
         """
@@ -38,14 +38,13 @@ class Graphe(Evodict):
         Raises:
             TypeError: Si la valeur n'est pas une liste.
         """
-        # Appel de la méthode de la classe parente pour définir la valeur associée à la clé spécifiée
-        super().__setitem__(cle, valeur)
-        # Ajout des valeurs comme des clés avec des listes vides comme valeurs associées
-        for value in valeur:
-            if value not in list(self.dictionnaire.keys()):
-                self.dictionnaire[cle] = []
-                self.historique.commit(f"Ajout du sommet {cle}")
-        print(self.dictionnaire, end="\n\n")        
+        return super().__setitem__(cle, valeur) 
+        value_in_key = False
+        for key in self.dictionnaire:
+            if (key == valeur):
+                value_in_key = True
+        if (value_in_key == False):
+            self.dictionnaire[valeur] = []       
 
     def __str__(self):
         """

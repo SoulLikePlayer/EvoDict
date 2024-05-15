@@ -1,54 +1,62 @@
 from EvoDict.graphsModule import Graphe
 
 class BellmanFord(Graphe):
-    def __init__(self, graphe, depart=None, arrivee=None):
+    """
+    Classe représentant l'algorithme de Bellman-Ford pour trouver le chemin le plus court dans un graphe non pondéré.
+
+    Attributes:
+        graphe (Graphe): Le graphe non pondéré.
+        debut (str): Le sommet de départ du chemin.
+        fin (str): Le sommet d'arrivée du chemin.
+    """
+    def __init__(self, graphe, debut=None, fin=None):
         """
-        Initialise un objet BellmanFord.
+        Initialise un nouvel objet de la classe BellmanFord.
 
         Args:
-            graphe (Graphe): L'objet Graphe représentant le graphe sur lequel appliquer l'algorithme.
-            depart (str, optional): Le nœud de départ. Par défaut, le premier nœud du graphe.
-            arrivee (str, optional): Le nœud d'arrivée. Par défaut, le dernier nœud du graphe.
+            graphe (Graphe): Le graphe non pondéré.
+            debut (str, optional): Le sommet de départ du chemin. Par défaut, None.
+            fin (str, optional): Le sommet d'arrivée du chemin. Par défaut, None.
         """
-        if depart is None:
-            depart = next(iter(graphe.dictionnaire))
-        if arrivee is None:
-            arrivee = next(iter(reversed(graphe.dictionnaire)))
-        self.depart = depart
-        self.arrivee = arrivee
-        self.dictionnaire = graphe.dictionnaire
-    
+        self.graphe = graphe
+        self.debut = debut if debut else next(iter(self.graphe.dictionnaire.keys()), None)
+        self.fin = fin if fin else list(self.graphe.dictionnaire.keys())[-1]
+
     def __call__(self):
         """
-        Trouve le chemin le plus court entre le nœud de départ et le nœud d'arrivée en utilisant l'algorithme de Bellman-Ford.
+        Trouve le chemin le plus court dans le graphe non pondéré à l'aide de l'algorithme de Bellman-Ford.
+        Crée un nouveau graphe pondéré représentant le chemin le plus court.
 
         Returns:
-            dict: Le dictionnaire représentant le plus court chemin avec les nœuds comme clés et leurs successeurs comme valeurs.
+            GraphePondere: Le graphe pondéré représentant le chemin le plus court.
         """
-        # Utiliser l'algorithme de Bellman-Ford pour trouver le chemin le plus court
-        distances = {noeud: float('inf') for noeud in self.dictionnaire}
-        predecesseurs = {}
-        distances[self.depart] = 0
-        
-        for _ in range(len(self.dictionnaire) - 1):
-            for u in self.dictionnaire:
-                for v in self.dictionnaire[u]:
-                    poids = 1  # Nous supposons que tous les poids sont égaux à 1
-                    if distances[u] + poids < distances[v]:
-                        distances[v] = distances[u] + poids
-                        predecesseurs[v] = u
-        
-        # Reconstruire le chemin le plus court à partir des prédecesseurs
-        chemin = [self.arrivee]
-        while self.arrivee != self.depart:
-            self.arrivee = predecesseurs[self.arrivee]
-            chemin.append(self.arrivee)
-        chemin.reverse()
-        
-        # Créer un nouveau dictionnaire représentant le plus court chemin
-        plus_court_chemin = Graphe()
-        for i in range(len(chemin) - 1):
-            plus_court_chemin[chemin[i]] = [chemin[i + 1]]
+        if self.debut not in self.graphe.dictionnaire or self.fin not in self.graphe.dictionnaire:
+            raise ValueError("Les sommets de départ et d'arrivée doivent être présents dans le graphe.")
 
-        print(plus_court_chemin)
-        return plus_court_chemin
+        # Initialisation
+        distance = {sommet: float("inf") for sommet in self.graphe.dictionnaire}
+        distance[self.debut] = 0
+        predecesseur = {}
+
+        # Algorithme de Bellman-Ford
+        for _ in range(len(self.graphe.dictionnaire) - 1):
+            for sommet, voisins in self.graphe.dictionnaire.items():
+                for voisin in voisins:
+                    if distance[sommet] + 1 < distance[voisin]:
+                        distance[voisin] = distance[sommet] + 1
+                        predecesseur[voisin] = sommet
+
+        # Création du graphe pondéré représentant le chemin le plus court
+        chemin_courant = self.fin
+        chemin_plus_court = []
+        while chemin_courant != self.debut:
+            chemin_plus_court.insert(0, (predecesseur[chemin_courant], chemin_courant))
+            chemin_courant = predecesseur[chemin_courant]
+
+        # Créer le nouveau graphe représentant le chemin le plus court
+        nouveau_graphe = Graphe()
+        for depart, arrivee in chemin_plus_court:
+            nouveau_graphe[depart] = [arrivee]
+
+        print(nouveau_graphe)
+        return nouveau_graphe
