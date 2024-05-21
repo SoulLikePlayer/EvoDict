@@ -31,7 +31,7 @@ class EvoHistory:
   
   def refresh_treeview(self):
         self.tree.delete(*self.tree.get_children())
-        for commit, message in reversed(list(self.liste_commit.items())):
+        for commit, message in reversed(list(self.liste_commit[self.branche_actuelle].items())):
           self.tree.insert("", "end", text=commit[:16]+" : "+message)
         self.root.update()
 
@@ -57,22 +57,40 @@ class EvoHistory:
   
   def branch(self, nom_de_branche, copy_dict = False):
     self.liste_dictionnaire[nom_de_branche] = []
-    self.liste_commit[nom_de_branche] = []
+    self.liste_commit[nom_de_branche] = {f"commit n°{self.generer_id_random(7)} - Dictionnaire n°{self.id}" : f"Création de la branche{nom_de_branche}"}
     if (copy_dict):
       for element in self.liste_dictionnaire[self.branche_actuelle]:
-        self.liste_dictionnaire[nom_de_branche].append(copy.deepcopy(element))  
+        self.liste_dictionnaire[nom_de_branche].append(copy.deepcopy(element))
+        
   
   def checkout(self, nom_de_branche):
     if (nom_de_branche not in list(self.liste_dictionnaire.keys())):
       raise EvoHistoryError("Vous ne pouvez qu'accédez au branche que vous avez crée avant avec la commande branch")
     self.branche_actuelle = nom_de_branche
-    self.object.dictionnaire = self.liste_dictionnaire[self.branche_actuelle][-1]
-    print(f"switch a la branche {self.branche_actuelle}")
+    try:
+      self.object.dictionnaire = self.liste_dictionnaire[self.branche_actuelle][-1]
+    except:
+      self.object.dictionnaire = dict()
+    finally:
+      self.refresh_treeview()
+      print(f"switch a la branche {self.branche_actuelle}")
           
   def __call__(self):
     self.root.mainloop()
+    
+  def merge(self, nom_de_branche):
+    dictionnaire_autre = self.liste_dictionnaire[nom_de_branche][-1]
+    self.object.fusions(dictionnaire_autre)  
   
-  def __str__(self):
-    for cle, value in reversed(list(self.liste_commit.items())):
-      print(cle, "-->", value)
+  def log(self, all=False):
+    if (all):
+      for cle in self.liste_commit.keys():
+        print(f"branche {cle} : ")
+        for cle_cle, cle_value in(self.liste_commit[cle].items()):
+          print(cle_cle," : ",cle_value, end="\n")
+        print("\n\n")
+        print("-----------------------------------------------------")  
+    else:
+      for cle, value in reversed(list(self.liste_commit[self.branche_actuelle].items())):
+        print(cle, "-->", value)
     return ""
